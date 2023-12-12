@@ -1,0 +1,23 @@
+/* Dark Theme */
+.root {
+    -fx-background-color: #121212; /* Dark background color */
+    -fx-text-fill: white; /* Text color */
+    -fx-background-color: #383434; /* Background color */
+
+    -fx-background-image: url("subComponents/mainScreen/header/setting/image/darkk.jpg");
+
+}
+
+/* Buttons */
+.button {
+    -fx-background-color: #2d2d2d; /* Dark button background color */
+    -fx-text-fill: white; /* Button text color */
+}
+
+/* Labels */
+.label {
+    -fx-font-size: 16px; /* Font size for labels */
+    -fx-font-family: "Arial"; /* Font family */
+    -fx-text-fill: white; /* Label text color */
+    -fx-background-color: black; /* Background color for labels (or any desired color) */
+}

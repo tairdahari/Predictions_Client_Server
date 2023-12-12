@@ -1,0 +1,39 @@
+/* Apply styles to the header label */
+#chat-app-client-header {
+    -fx-alignment: center;
+    -fx-font-size: 25px;
+}
+
+/* Apply styles to the error message label */
+.error-label {
+    -fx-text-fill: red;
+    -fx-font-size: 12px;
+    -fx-padding: 5px;
+}
+
+/* Apply styles to the main action buttons (Log In and Log Out buttons) */
+.main-action-button {
+    -fx-font-size: 14px;
+    -fx-pref-width: 101px;
+    -fx-pref-height: 49px;
+    -fx-background-color: #4CAF50; /* Green color, you can change it */
+    -fx-text-fill: white;
+}
+
+/* Apply styles to the text field */
+.text-field {
+    -fx-pref-width: 118px;
+    -fx-pref-height: 31px;
+    -fx-font-size: 12px;
+    -fx-padding: 10px;
+}
+
+/* Apply styles to the label "User Name:" */
+.label {
+    -fx-font-size: 12px;
+}
+
+/* Apply styles to the HBox containing the buttons */
+.hbox {
+    -fx-spacing: 15px;
+}

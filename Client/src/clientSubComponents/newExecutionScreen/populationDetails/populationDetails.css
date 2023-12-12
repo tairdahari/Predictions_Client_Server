@@ -1,0 +1,46 @@
+/* populationDetails.css */
+
+/* Define styles for the top label */
+.label-top {
+    -fx-pref-height: 18.0;
+    -fx-pref-width: 174.0;
+    -fx-text-alignment: center;
+    -fx-font-family: "System Bold";
+    -fx-font-size: 14.0;
+    -fx-padding: 10.0;
+}
+
+/* Define styles for the center content */
+#populationVboxComponent {
+    -fx-pref-height: 335.0;
+    -fx-pref-width: 386.0;
+}
+
+.label-center {
+    -fx-alignment: top-left;
+    -fx-pref-height: 28.0;
+    -fx-pref-width: 66.0;
+    -fx-font-family: "System Bold";
+    -fx-font-size: 13.0;
+}
+
+.label-count {
+    -fx-font-family: "System Bold";
+    -fx-font-size: 14.0;
+    -fx-padding: 0 0 0 100.0;
+}
+
+/* Define styles for the bottom label */
+.label-bottom {
+    -fx-alignment: top-left;
+    -fx-pref-height: 28.0;
+    -fx-pref-width: 66.0;
+    -fx-font-size: 13.0;
+}
+
+.label-current-count {
+    -fx-pref-height: 19.0;
+    -fx-pref-width: 30.0;
+    -fx-font-size: 13.0;
+    -fx-padding: 0 0 0 12.0;
+}

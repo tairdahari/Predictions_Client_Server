@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Main-Class: subComponents.mainScreen.app.Main
+Class-Path: JARDto.jar JAREngine.jar
+

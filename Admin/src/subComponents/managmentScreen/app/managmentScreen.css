@@ -1,0 +1,31 @@
+/* Management Screen Styles */
+
+/* Labels */
+.label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 5px;
+}
+
+/* Buttons */
+.button {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 5px 10px;
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+}
+
+/* Spinner */
+.spinner {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 5px;
+}
+
+/* ListView */
+.list-view {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 5px;
+}

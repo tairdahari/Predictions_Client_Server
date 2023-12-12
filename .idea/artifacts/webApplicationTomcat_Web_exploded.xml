@@ -1,0 +1,19 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="webApplicationTomcat:Web exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/webApplicationTomcat_Web_exploded</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="webApplicationTomcat/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="webApplicationTomcat" />
+          <element id="module-output" name="Engine" />
+          <element id="module-output" name="DTO" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="google-gson-2" />
+          <element id="library" level="project" name="okHttp" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>

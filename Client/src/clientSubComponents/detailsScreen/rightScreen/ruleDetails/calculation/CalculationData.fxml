@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="465.0" prefWidth="350.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientSubComponents.detailsScreen.rightScreen.ruleDetails.calculation.CalculationDetailsController">
+   <children>
+      <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+         <children>
+            <Label styleClass="labels" text="Name: " />
+            <Label fx:id="actionName" prefHeight="18.0" prefWidth="139.0" styleClass="labels" />
+         </children>
+         <padding>
+            <Insets left="10.0" />
+         </padding>
+      </HBox>
+      <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+         <children>
+            <Label styleClass="labels" text="Main entity name: " />
+            <Label fx:id="mainEntityName" prefHeight="18.0" prefWidth="94.0" styleClass="labels" />
+         </children>
+         <padding>
+            <Insets left="10.0" />
+         </padding>
+      </HBox>
+      <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+         <children>
+            <Label styleClass="labels" text="Second entity name: " />
+            <Label fx:id="secondEntityName" prefHeight="18.0" prefWidth="116.0" styleClass="labels" />
+         </children>
+         <padding>
+            <Insets left="10.0" />
+         </padding>
+      </HBox>
+      <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+         <children>
+            <Label styleClass="labels" text="Result-prop: " />
+            <Label fx:id="resultProp" prefHeight="18.0" prefWidth="120.0" styleClass="labels" />
+         </children>
+         <padding>
+            <Insets left="10.0" />
+         </padding>
+      </HBox>
+      <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+         <children>
+            <Label styleClass="labels" text="Arg1: " />
+            <Label fx:id="arg1" prefHeight="18.0" prefWidth="111.0" styleClass="labels" />
+         </children>
+         <padding>
+            <Insets left="10.0" />
+         </padding>
+      </HBox>
+      <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+         <children>
+            <Label styleClass="labels" text="Arg2: " />
+            <Label fx:id="arg2" prefHeight="18.0" prefWidth="141.0" styleClass="labels" />
+         </children>
+         <padding>
+            <Insets left="10.0" />
+         </padding>
+      </HBox>
+   </children>
+</VBox>

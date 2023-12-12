@@ -1,0 +1,12 @@
+/* Apply styles to the VBox */
+#vBoxComponent {
+    /* No background color specified, using default */
+    -fx-padding: 10px; /* Add padding */
+    -fx-spacing: 10px; /* Add spacing between children */
+}
+
+/* Apply styles to children of VBox */
+#vBoxComponent > * {
+    -fx-font-size: 14px; /* Set font size for children */
+    -fx-text-fill: #333333; /* Set text color for children */
+}

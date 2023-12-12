@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+
+<BorderPane fx:id="resultScreenComponent" prefHeight="531.2" prefWidth="1050.4" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientSubComponents.results.app.ResultsScreenController">
+   <left>
+      <HBox fx:id="executionListBox" prefHeight="100.0" prefWidth="304.0" BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets top="10.0" />
+         </BorderPane.margin></HBox>
+   </left>
+   <center>
+      <BorderPane fx:id="perSimulationBorder" prefHeight="400.0" prefWidth="400.0">
+         <top>
+            <HBox fx:id="executionDetailsBox" prefHeight="214.0" prefWidth="850.0" BorderPane.alignment="CENTER" />
+         </top>
+         <bottom>
+            <HBox fx:id="executionResultsBox" prefHeight="299.0" prefWidth="850.0" BorderPane.alignment="CENTER">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <BorderPane.margin>
+                  <Insets left="10.0" />
+               </BorderPane.margin></HBox>
+         </bottom>
+      </BorderPane>
+   </center>
+</BorderPane>

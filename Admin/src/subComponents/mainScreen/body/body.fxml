@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<TabPane fx:id="optionsTabPane" maxHeight="600.0" maxWidth="1050.0" minHeight="600.0" minWidth="1050.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="600.0" tabClosingPolicy="UNAVAILABLE" tabMinHeight="30.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="subComponents.mainScreen.body.BodyController">
+  <tabs>
+      <Tab fx:id="managementButton" disable="true" onSelectionChanged="#managementButtonAction" style="-fx-font-weight: bold;" text="Management">
+         <content>
+            <AnchorPane nodeOrientation="LEFT_TO_RIGHT" prefHeight="261.0">
+               <children>
+                  <fx:include fx:id="managementScreenComponent" source="../../managmentScreen/app/managementScreen.fxml" />
+               </children>
+            </AnchorPane>
+         </content>
+      </Tab>
+      <Tab fx:id="allocationsButton" disable="true" onSelectionChanged="#allocationsButtonAction" style="-fx-font-weight: bold;" text="Allocations">
+         <content>
+            <AnchorPane>
+               <children>
+                  <fx:include fx:id="allocationsScreenComponent" source="../../allocationsScreen/app/allocationsScreen.fxml" />
+               </children></AnchorPane>
+         </content>
+      </Tab>
+    <Tab fx:id="executionsHistoryButton" disable="true" onSelectionChanged="#executionsHistoryButtonAction" style="-fx-font-weight: bold;" text="Executions History">
+         <content>
+            <AnchorPane>
+               <children>
+                  <fx:include fx:id="resultsScreenComponent" source="../../results/app/resultsScreen.fxml" />
+               </children>
+            </AnchorPane>
+         </content>
+    </Tab>
+  </tabs>
+</TabPane>

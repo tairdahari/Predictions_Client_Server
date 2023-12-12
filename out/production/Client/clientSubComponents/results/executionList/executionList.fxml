@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientSubComponents.results.executionList.ExecutionListController">
+   <children>
+      <TableView fx:id="simulationsTable" prefHeight="531.0" prefWidth="304.0">
+        <columns>
+          <TableColumn fx:id="id" prefWidth="44.0" text="ID" />
+          <TableColumn fx:id="inProgress" prefWidth="84.79998779296875" text="Status" />
+            <TableColumn fx:id="startTime" prefWidth="90.4000244140625" text="Start Time" />
+            <TableColumn fx:id="endTime" prefWidth="83.20001220703125" text="End Time" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>

@@ -1,0 +1,19 @@
+/* Style for the executeButton */
+#executeButton {
+    -fx-background-color: #007ACC;
+    -fx-text-fill: white;
+}
+
+/* Style for the submitButton */
+#submitButton {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+}
+
+/* Style for the ComboBox */
+#userChoiceSimulationComboBox {
+    -fx-font-size: 14px;
+    -fx-background-color: #F0F0F0;
+}
+
+/* Add more styles for other elements as needed */

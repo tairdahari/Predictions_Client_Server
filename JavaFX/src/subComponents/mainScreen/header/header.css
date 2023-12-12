@@ -1,0 +1,30 @@
+/* Apply styles to the ScrollPane */
+#root {
+    -fx-background-color: #f0f0f0; /* Light gray background color */
+}
+
+/* Apply styles to the Label */
+#titleLabel {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+/* Apply styles to the CheckBox */
+#animationCheckbox {
+    -fx-font-size: 14px;
+}
+
+/* Apply styles to the VBox */
+#vbox {
+    -fx-spacing: 10px; /* Vertical spacing between children */
+}
+
+/* Apply styles to the GridPane */
+#gridPane {
+    -fx-alignment: center; /* Center content horizontally */
+}
+
+/* Apply styles to the CheckBox's margin */
+#animationCheckbox .box {
+    -fx-padding: 10px; /* Add padding around the CheckBox */
+}

@@ -1,0 +1,26 @@
+/* Summer Theme */
+
+.root {
+    -fx-background-color: #ffc107; /* Make the root background transparent */
+    -fx-text-fill: #333; /* Text color */
+}
+
+/* Buttons */
+.button {
+    -fx-background-color: #ffc107; /* Button background color */
+    -fx-text-fill: #333; /* Button text color */
+}
+
+/* Labels */
+.label {
+    -fx-font-size: 16px; /* Font size for labels */
+    -fx-font-family: "Arial"; /* Font family */
+    -fx-text-fill: #333; /* Label text color */
+}
+
+/* Set background image for the entire Scene */
+.scene {
+    -fx-background-image: url('subComponents/mainScreen/header/setting/image/summer.jpg'); /* URL to your image */
+    -fx-background-size: cover; /* Adjust the size as needed */
+    -fx-background-repeat: no-repeat;
+}

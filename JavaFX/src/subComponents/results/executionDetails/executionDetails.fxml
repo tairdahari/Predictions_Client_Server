@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="214.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="subComponents.results.executionDetails.ExecutionDetailsController">
+   <top>
+      <AnchorPane prefHeight="42.0" prefWidth="722.0" BorderPane.alignment="CENTER">
+         <children>
+            <GridPane layoutX="257.0" prefHeight="42.0" prefWidth="469.0">
+              <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="145.20001220703125" minWidth="10.0" prefWidth="66.79998779296875" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="233.20001220703125" minWidth="10.0" prefWidth="159.99996337890627" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="219.4000244140625" minWidth="10.0" prefWidth="107.20001220703125" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="247.19999999999993" minWidth="10.0" prefWidth="207.99998779296874" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label prefHeight="20.0" prefWidth="69.0" text="Tick:">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <GridPane.margin>
+                        <Insets left="10.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <Label fx:id="tickLabel" prefHeight="20.0" prefWidth="125.0" GridPane.columnIndex="1">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="runTimeLabel" layoutX="160.0" layoutY="26.0" prefHeight="20.0" prefWidth="127.0" GridPane.columnIndex="3">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="20.0" layoutY="26.0" text="RunTime:" GridPane.columnIndex="2">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+               </children>
+               <padding>
+                  <Insets top="10.0" />
+               </padding>
+            </GridPane>
+            <Button fx:id="reRunButton" layoutX="738.0" layoutY="5.0" mnemonicParsing="false" onAction="#reRunButtonAction" prefHeight="30.0" prefWidth="97.0" text="Rerun">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Button>
+         </children>
+      </AnchorPane>
+   </top>
+   <center>
+      <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <AnchorPane prefHeight="130.0" prefWidth="851.0">
+               <children>
+                  <TableView fx:id="entitiesTable" layoutX="298.0" layoutY="14.0" prefHeight="130.0" prefWidth="256.0">
+                    <columns>
+                      <TableColumn fx:id="entityName" prefWidth="127.60002136230469" text="Entity Name" />
+                      <TableColumn fx:id="quantity" prefWidth="127.99993896484375" text="Quantity" />
+                    </columns>
+                  </TableView>
+               </children>
+            </AnchorPane>
+         </children>
+      </HBox>
+   </center>
+   <right>
+      <VBox fx:id="buttonsVBox" prefHeight="172.0" prefWidth="126.0" BorderPane.alignment="CENTER" />
+   </right>
+</BorderPane>

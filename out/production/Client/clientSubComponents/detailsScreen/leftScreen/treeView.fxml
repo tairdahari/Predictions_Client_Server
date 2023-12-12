@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TreeView?>
+
+
+<ScrollPane prefHeight="652.0" prefWidth="335.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientSubComponents.detailsScreen.leftScreen.TreeViewController">
+   <content>
+      <TreeView fx:id="treeViewForDetailsScreenComponent" nodeOrientation="LEFT_TO_RIGHT" onContextMenuRequested="#selectedItem" onMouseClicked="#selectedItem" prefHeight="650.0" prefWidth="335.0" stylesheets="@treeView.css" />
+   </content>
+</ScrollPane>

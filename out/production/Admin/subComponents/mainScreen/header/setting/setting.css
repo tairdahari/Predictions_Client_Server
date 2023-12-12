@@ -1,0 +1,31 @@
+/* setting.css */
+
+/* Style for the left button */
+.button-left {
+    -fx-background-color: transparent; /* Remove background color */
+    -fx-background-insets: 0; /* Remove background insets */
+    -fx-padding: 0; /* Remove padding */
+    -fx-border-width: 0; /* Remove border */
+    -fx-content-display: top; /* Display content (image) above text */
+    -fx-graphic-text-gap: 10; /* Adjust the gap between image and text */
+    -fx-text-fill: black; /* Text color */
+    -fx-font-size: 14px; /* Font size for button text */
+}
+
+/* Style for the right button */
+.button-right {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-content-display: top;
+    -fx-graphic-text-gap: 10;
+    -fx-text-fill: black;
+    -fx-font-size: 14px;
+}
+
+/* Style for the image inside the button */
+.button .image-view {
+    -fx-fit-height: 150px; /* Set image height */
+    -fx-fit-width: 200px; /* Set image width */
+}

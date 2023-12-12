@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="471.0" prefWidth="450.0" stylesheets="@populationDetails.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="subComponents.newExecutionScreen.populationDetails.PopulationDetailsController">
+   <top>
+      <Label prefHeight="26.0" prefWidth="202.0" text="Enter Entities Population:" textAlignment="CENTER" BorderPane.alignment="TOP_CENTER">
+         <BorderPane.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </BorderPane.margin>
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font>
+      </Label>
+   </top>
+   <center>
+      <ScrollPane prefHeight="257.0" prefWidth="450.0" BorderPane.alignment="CENTER">
+         <content>
+            <VBox fx:id="populationVboxComponent" prefHeight="335.0" prefWidth="386.0">
+               <children>
+                  <HBox prefHeight="20.0" prefWidth="230.0">
+                     <children>
+                        <Label fx:id="maxCountLabel1" text="Name:" HBox.hgrow="ALWAYS">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                        <Label text="Count:" HBox.hgrow="ALWAYS">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="150.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                     <VBox.margin>
+                        <Insets left="55.0" top="15.0" />
+                     </VBox.margin>
+                  </HBox>
+               </children>
+            </VBox>
+         </content>
+         <BorderPane.margin>
+            <Insets bottom="20.0" left="30.0" right="30.0" />
+         </BorderPane.margin>
+      </ScrollPane>
+   </center>
+   <bottom>
+      <HBox prefHeight="19.0" prefWidth="383.0" BorderPane.alignment="BOTTOM_LEFT">
+         <BorderPane.margin>
+            <Insets bottom="65.0" left="30.0" right="20.0" />
+         </BorderPane.margin>
+         <children>
+            <Label alignment="TOP_LEFT" prefHeight="19.0" prefWidth="98.0" text="Max Count:">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="maxCountLabel" alignment="TOP_LEFT" prefHeight="20.0" prefWidth="99.0">
+               <font>
+                  <Font size="14.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="12.0" />
+               </HBox.margin>
+            </Label>
+            <Label alignment="TOP_LEFT" prefHeight="20.0" prefWidth="105.0" text="Current Count:" HBox.hgrow="ALWAYS">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="20.0" />
+               </HBox.margin>
+            </Label>
+            <Label fx:id="currentCountLabel" alignment="TOP_LEFT" prefHeight="20.0" prefWidth="62.0">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
+   </bottom>
+</BorderPane>

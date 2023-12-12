@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<AnchorPane prefHeight="122.0" prefWidth="363.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="subComponents.results.executionError.ExecutionErrorController">
+   <children>
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="110.0" text="Simulation Error:">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+      <Label fx:id="errorLabel" layoutX="22.0" layoutY="40.0" prefHeight="66.0" prefWidth="318.0" textAlignment="CENTER" />
+   </children>
+</AnchorPane>

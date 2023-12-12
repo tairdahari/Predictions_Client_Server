@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="JAREngine">
+    <output-path>$PROJECT_DIR$/out/artifacts/JAREngine</output-path>
+    <root id="archive" name="JAREngine.jar">
+      <element id="module-output" name="Engine" />
+    </root>
+  </artifact>
+</component>

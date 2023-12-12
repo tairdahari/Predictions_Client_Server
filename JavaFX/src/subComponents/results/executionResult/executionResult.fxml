@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TreeView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<TabPane fx:id="tabPane" prefHeight="290.0" prefWidth="850.0" stylesheets="@executionResult.css" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="subComponents.results.executionResult.ExecutionResultController">
+  <tabs>
+    <Tab fx:id="EntityQuantityGraphTab" text="Entity Quantity Graph">
+      <content>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <LineChart fx:id="entityQuantityGraph" layoutX="15.0" layoutY="-4.0" prefHeight="209.0" prefWidth="793.0" title="Quantities Of Entities">
+                    <xAxis>
+                      <CategoryAxis label="ticks" side="BOTTOM" />
+                    </xAxis>
+                    <yAxis>
+                      <NumberAxis label="Quantity" prefHeight="144.0" prefWidth="49.0" side="LEFT" />
+                    </yAxis>
+                  </LineChart>
+                  <Button fx:id="loadButton" layoutX="401.0" layoutY="211.0" mnemonicParsing="false" onAction="#handleLoadButton" prefHeight="25.0" prefWidth="70.0" text="Load" />
+               </children></AnchorPane>
+      </content>
+    </Tab>
+    <Tab text="Statistical Information">
+      <content>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <BorderPane layoutX="5.0" layoutY="4.0" prefHeight="255.0" prefWidth="838.0">
+                     <left>
+                        <AnchorPane prefHeight="148.0" prefWidth="178.0" BorderPane.alignment="CENTER">
+                           <children>
+                              <TreeView fx:id="treeView" layoutX="2.0" layoutY="1.0" onContextMenuRequested="#selectedItem" onMouseClicked="#selectedItem" prefHeight="122.0" prefWidth="174.0" />
+                           </children>
+                        </AnchorPane>
+                     </left>
+                     <center>
+                        <AnchorPane prefHeight="255.0" prefWidth="313.0" BorderPane.alignment="CENTER">
+                           <children>
+                              <HBox fx:id="histogram" layoutX="5.0" layoutY="1.0" prefHeight="250.0" prefWidth="443.0">
+                                 <children>
+                                    <GridPane fx:id="histogramHolder" prefHeight="238.0" prefWidth="440.0">
+                                      <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                      </columnConstraints>
+                                      <rowConstraints>
+                                        <RowConstraints maxHeight="112.00000610351563" minHeight="10.0" prefHeight="20.000008010864263" vgrow="SOMETIMES" />
+                                        <RowConstraints maxHeight="217.5999797821045" minHeight="10.0" prefHeight="216.79999198913575" vgrow="SOMETIMES" />
+                                      </rowConstraints>
+                                       <children>
+                                          <Label text="Histogram" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+                                             <font>
+                                                <Font name="System Bold" size="14.0" />
+                                             </font>
+                                          </Label>
+                                          <BarChart fx:id="barChart" GridPane.rowIndex="1">
+                                            <xAxis>
+                                              <CategoryAxis label="Property" side="BOTTOM" />
+                                            </xAxis>
+                                            <yAxis>
+                                              <NumberAxis label="Frequency" side="LEFT" />
+                                            </yAxis>
+                                          </BarChart>
+                                       </children>
+                                    </GridPane>
+                                 </children></HBox>
+                              <HBox fx:id="consistency" layoutX="460.0" prefHeight="90.0" prefWidth="180.0">
+                                 <children>
+                                    <GridPane HBox.hgrow="ALWAYS">
+                                      <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                      </columnConstraints>
+                                      <rowConstraints>
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                      </rowConstraints>
+                                       <children>
+                                          <Label text="Consistency" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS">
+                                             <font>
+                                                <Font name="System Bold" size="14.0" />
+                                             </font>
+                                          </Label>
+                                          <Label fx:id="consistencyLabel" contentDisplay="CENTER" prefHeight="20.0" prefWidth="113.0" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                       <opaqueInsets>
+                                          <Insets left="10.0" />
+                                       </opaqueInsets>
+                                    </GridPane>
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="30.0" />
+                                 </padding>
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                              </HBox>
+                              <HBox fx:id="average" layoutX="460.0" layoutY="105.0" prefHeight="90.0" prefWidth="180.0">
+                                 <children>
+                                    <GridPane HBox.hgrow="ALWAYS">
+                                       <columnConstraints>
+                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                       </columnConstraints>
+                                       <rowConstraints>
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                       </rowConstraints>
+                                       <children>
+                                          <Label text="Average" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS">
+                                             <font>
+                                                <Font name="System Bold" size="14.0" />
+                                             </font>
+                                          </Label>
+                                          <Label fx:id="averageLabel" contentDisplay="CENTER" prefHeight="20.0" prefWidth="113.0" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Label>
+                                          <Label text="(For Numeric Properties)" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="BOTTOM" GridPane.vgrow="ALWAYS" />
+                                       </children>
+                                    </GridPane>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </AnchorPane>
+                     </center>
+                  </BorderPane>
+               </children></AnchorPane>
+      </content>
+    </Tab>
+  </tabs>
+</TabPane>

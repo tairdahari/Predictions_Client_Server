@@ -1,0 +1,42 @@
+/* common-style.css */
+
+/* General styling for labels */
+.label {
+    -fx-font-size: 15px;
+    -fx-font-weight: normal; /* Changed from 'regular' to 'normal' */
+}
+
+/* Styling for ScrollPane and AnchorPane */
+.scroll-pane, .anchor-pane {
+    -fx-min-height: 0;
+    -fx-min-width: 0;
+    -fx-pref-height: 400px;
+    -fx-pref-width: 600px;
+}
+
+/* Styling for GridPane */
+.grid-pane {
+    -fx-pref-height: 386px;
+    -fx-pref-width: 589px;
+}
+
+/* Padding for GridPane children */
+.grid-pane .label {
+    -fx-padding: 10px;
+}
+
+/* Styling for selected cells in the GridPane */
+.grid-pane .label:selected {
+    -fx-background-color: #0078d4; /* Change to your desired color */
+    -fx-text-fill: white; /* Change to your desired text color */
+}
+
+/* Styling for ScrollPane content */
+.scroll-pane .anchor-pane {
+    -fx-opacity: 0.95;
+}
+
+/* Styling for ScrollPane content children */
+.scroll-pane .anchor-pane .grid-pane .label {
+    -fx-font-size: 15px;
+}

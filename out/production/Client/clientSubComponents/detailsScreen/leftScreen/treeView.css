@@ -1,0 +1,7 @@
+/* Apply styles to the TreeView */
+#treeViewForDetailsScreenComponent {
+    /* No background color specified, using default */
+    -fx-font-size: 15px; /* Set font size */
+    -fx-text-fill: #333333; /* Set text color */
+    /* Add any other styles you want */
+}

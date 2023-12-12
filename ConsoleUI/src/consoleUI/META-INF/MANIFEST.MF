@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Main-Class: consoleUI.Main
+Class-Path: JARDto.jar JAREngine.jar
+

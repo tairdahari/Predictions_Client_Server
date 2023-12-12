@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane prefHeight="531.0" prefWidth="1050.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="subComponents.allocationsScreen.app.AllocationsScreenController">
+   <children>
+      <TableView fx:id="allClientsRequests" layoutX="45.0" layoutY="77.0" prefHeight="416.0" prefWidth="952.0">
+        <columns>
+          <TableColumn fx:id="serialNumber" prefWidth="111.19997787475586" text="Serial Number" />
+          <TableColumn fx:id="simulationName" prefWidth="144.8000030517578" text="Simulation" />
+            <TableColumn fx:id="clientName" prefWidth="124.7999267578125" text="Client" />
+            <TableColumn fx:id="amountToRun" prefWidth="152.800048828125" text="Amount To Run" />
+            <TableColumn minWidth="0.0" prefWidth="0.0" text="C2" />
+            <TableColumn fx:id="termination" prefWidth="104.0" text="Temination" />
+            <TableColumn fx:id="runningSimulationsNumber" prefWidth="77.60003662109375" text="Running" />
+            <TableColumn fx:id="endedSimulationNumber" prefWidth="95.19989013671875" text="Ended" />
+            <TableColumn fx:id="requestStatus" prefWidth="144.0001220703125" text="Status" />
+        </columns>
+      </TableView>
+      <Label layoutX="471.0" layoutY="26.0" prefHeight="34.0" prefWidth="106.0" text="All Requests" underline="true">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

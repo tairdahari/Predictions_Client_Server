@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="JARDto">
+    <output-path>$PROJECT_DIR$/out/artifacts/JARDto</output-path>
+    <root id="archive" name="JARDto.jar">
+      <element id="module-output" name="DTO" />
+    </root>
+  </artifact>
+</component>
