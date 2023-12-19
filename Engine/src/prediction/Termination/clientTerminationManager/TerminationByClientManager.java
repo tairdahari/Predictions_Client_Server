@@ -15,7 +15,7 @@ public class TerminationByClientManager implements ITerminationByClientManager{
         for (DTOTerminationByClient dtoTerminationByClient : termination) {
             if (dtoTerminationByClient.getTerminationName().equals("byTicks")) {
                 simulationTerminationConditions.add(new ByTicks(dtoTerminationByClient.getCount()));
-            } else if (dtoTerminationByClient.getTerminationName().equals("byTicks")) {
+            } else if (dtoTerminationByClient.getTerminationName().equals("bySeconds")) {
                 simulationTerminationConditions.add(new BySeconds(dtoTerminationByClient.getCount()));
             } else if (dtoTerminationByClient.getTerminationName().equals("byUser")) {
                 simulationTerminationConditions.add(new ByUser(0));

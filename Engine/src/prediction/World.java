@@ -1,9 +1,8 @@
 package prediction;
 
-import prediction.Termination.manager.TerminationManagerDefinitionImpl;
-import prediction.defenition.grid.GridDefinition;
 import prediction.defenition.entity.manager.EntityDefinitionManager;
 import prediction.defenition.enviroment.manager.EnvVariableManagerImpl;
+import prediction.defenition.grid.GridDefinition;
 import prediction.rule.manager.RuleDefinitionManagerImpl;
 import xmlJavaFXReader.schema.generated.PRDWorld;
 
@@ -53,10 +52,10 @@ public class World implements Serializable {
         return envVariableManager;
     }
 
-    public TerminationManagerDefinitionImpl getTerminationManager() {
-        //return terminationManager;
-        return null;
-    }
+//    public TerminationManagerDefinitionImpl getTerminationManager() {
+//        //return terminationManager;
+//        return null;
+//    }
 
     public List<String> getWorldProperties() {
         return worldProperties;

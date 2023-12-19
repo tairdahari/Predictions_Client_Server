@@ -1,5 +1,6 @@
 package prediction.execution.context;
 
+import prediction.Termination.clientTerminationManager.TerminationByClientManager;
 import prediction.World;
 import prediction.defenition.property.Range;
 import prediction.defenition.property.impl.FloatPropertyDefinition;
@@ -29,8 +30,10 @@ public class ContextImpl implements IContext {
     private World world;
     private eSimulationState inProgress = eSimulationState.RUNNING;
     private final Map<Integer, Integer> entityQuantities = new HashMap<>();
+    private final TerminationByClientManager terminationManager;
 
-    public ContextImpl(int idForSimulation, World world, IEntityInstance primaryEntityInstance, IEntityInstanceManager entityInstanceManager, IActiveEnvironment activeEnvironment, GridManager gridManager) {
+
+    public ContextImpl(int idForSimulation, World world, IEntityInstance primaryEntityInstance, IEntityInstanceManager entityInstanceManager, IActiveEnvironment activeEnvironment, GridManager gridManager, TerminationByClientManager terminationManager) {
         this.primaryEntityInstance = primaryEntityInstance;
         this.entityInstanceManager = entityInstanceManager;
         this.activeEnvironment = activeEnvironment;
@@ -41,6 +44,7 @@ public class ContextImpl implements IContext {
         this.instancesForUpdate = new ArrayList<>();
         this.world = world;
         this.simulationId = idForSimulation;
+        this.terminationManager = terminationManager;
     }
 
     @Override
@@ -57,7 +61,10 @@ public class ContextImpl implements IContext {
     public void setPrimaryEntityInstance(IEntityInstance entityInstance) {
         this.primaryEntityInstance = entityInstance;
     }
-
+    @Override
+    public TerminationByClientManager getTerminationManager() {
+        return terminationManager;
+    }
     @Override
     public void setSecondaryEntityInstance(IEntityInstance entityInstance) {
         this.secondaryEntityInstance = entityInstance;

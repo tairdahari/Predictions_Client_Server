@@ -27,8 +27,7 @@ public class User {
         this.userName = userName;
     }
     public void setRequestStatus(String serialNumber, String status) {
-        allClientRequests.get(serialNumber).setRequestStatus(status);
-
+        allClientRequests.get(Integer.parseInt(serialNumber)).setRequestStatusLogic(status);
     }
 
     public String getUserName() {

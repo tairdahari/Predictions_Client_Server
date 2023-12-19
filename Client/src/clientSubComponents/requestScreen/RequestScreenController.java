@@ -17,8 +17,6 @@ import org.jetbrains.annotations.NotNull;
 import util.Constants;
 import util.http.HttpClientUtil;
 import utils.*;
-import javafx.beans.property.SimpleStringProperty;
-
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -88,7 +86,7 @@ public class RequestScreenController implements Closeable {
 
         runningSimulationsNumber.setCellValueFactory(cellData -> new SimpleIntegerProperty(0).asObject().asString());
         endedSimulationNumber.setCellValueFactory(cellData -> new SimpleIntegerProperty(0).asObject().asString());
-        requestStatus.setCellValueFactory(cellData -> new SimpleStringProperty("Waiting"));
+       // requestStatus.setCellValueFactory(cellData -> new SimpleStringProperty("Waiting"));
         setSpinners();
 
         allClientsRequests.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
@@ -246,7 +244,7 @@ public class RequestScreenController implements Closeable {
                 try {
                     if (response.isSuccessful()) {
                         Platform.runLater(() -> {
-                            System.out.println("sara hamalca");
+                            //System.out.println("sara hamalca");
                         });
                     }} finally {
                     response.close();
@@ -295,16 +293,18 @@ public class RequestScreenController implements Closeable {
     void executeButtonClicked(ActionEvent event) {
         if(chosenDtoClientRequest != null) {
             setNewExecutionSimulationName(chosenDtoClientRequest.getSimulationName());
+            mainController.getNewExecutionScreenComponentController().getDetailsHbox().getChildren().clear();
+
             mainController.openTabNewExecution();
-            //mainController.getNewExecutionScreenComponentController().getDetailsHbox().getChildren().clear();
+            mainController.setSimulationSerialNumber(chosenDtoClientRequest.getSerialNumber());
+            mainController.setSimulationName(chosenDtoClientRequest.getSimulationName());
             mainController.newExecutionButtonAction(event);
 
         }
-
     }
     public void setNewExecutionSimulationName(String simulationName) {
         mainController.getNewExecutionScreenComponentController().setSimulationName(simulationName);
-
+        mainController.getNewExecutionScreenComponentController().setSerialNumber(chosenDtoClientRequest.getSerialNumber());
     }
 
 //    private void loadNewExecutionScreen(String simulationName) {

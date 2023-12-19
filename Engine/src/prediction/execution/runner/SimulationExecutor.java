@@ -2,12 +2,11 @@ package prediction.execution.runner;
 
 import prediction.Termination.BySeconds;
 import prediction.Termination.ByTicks;
+import prediction.Termination.clientTerminationManager.TerminationByClientManager;
 import prediction.action.api.IAction;
 import prediction.action.impl.condition.AbstractConditionAction;
 import prediction.defenition.entity.IEntityDefinition;
 import prediction.defenition.grid.Point;
-import prediction.worldManager.WorldManager;
-import prediction.worldManager.IWorldManager;
 import prediction.execution.context.GridManager;
 import prediction.execution.context.IContext;
 import prediction.execution.instance.entity.IEntityInstance;
@@ -15,6 +14,8 @@ import prediction.execution.simulationExecutionDetails.ISimulationDetails;
 import prediction.execution.simulationExecutionDetails.SimulationDetails;
 import prediction.execution.simulations.SimulationExecutionManager;
 import prediction.rule.IRule;
+import prediction.worldManager.IWorldManager;
+import prediction.worldManager.WorldManager;
 
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
@@ -33,6 +34,7 @@ public class SimulationExecutor implements Runnable {
     private List<Integer> populationList;
     private List<Object> userEnvVarChoices;
     private IWorldManager engineManager;
+    private TerminationByClientManager terminationByClientManager;
 
 
     public eSimulationState getSimulationState() {
@@ -43,10 +45,11 @@ public class SimulationExecutor implements Runnable {
         this.simulationState = simulationState;
     }
 
-    public SimulationExecutor(IContext context, SimulationExecutionManager simulationExecutionManager, WorldManager worldManager) {
+    public SimulationExecutor(IContext context, SimulationExecutionManager simulationExecutionManager, WorldManager worldManager, TerminationByClientManager terminationManager) {
         this.context = context;
         this.simulationExecutionManager =simulationExecutionManager;
         this.engineManager = worldManager;
+        this.terminationByClientManager = terminationManager;
     }
 
     @Override
@@ -264,7 +267,7 @@ public class SimulationExecutor implements Runnable {
         return false;
     }
     public boolean checkTerminationByTicks(int currentTick) {
-        for (Object condition : context.getWorld().getTerminationManager().getSimulationTerminationConditions()) {
+        for (Object condition : context.getTerminationManager().getSimulationTerminationConditions()) {
             if (condition instanceof ByTicks) {
                 ByTicks termination = (ByTicks) condition;
                 if(currentTick >= termination.getCount()) {
@@ -279,7 +282,7 @@ public class SimulationExecutor implements Runnable {
         long startTime = System.currentTimeMillis();
         long maxRunTimeMillis;
 
-        for (Object condition: context.getWorld().getTerminationManager().getSimulationTerminationConditions()) {
+        for (Object condition: context.getTerminationManager().getSimulationTerminationConditions()) {
             if (condition instanceof BySeconds) {
                 BySeconds termination = (BySeconds) condition;
                 Integer seconds = termination.getCount();

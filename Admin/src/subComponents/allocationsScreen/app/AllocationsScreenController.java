@@ -1,27 +1,21 @@
 package subComponents.allocationsScreen.app;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ComboBox;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.HttpUrl;
-import okhttp3.Response;
+import javafx.scene.input.MouseEvent;
+import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
 import subComponents.mainScreen.body.BodyController;
 import util.Constants;
 import util.http.HttpClientUtil;
-import utils.DTOActionDetails;
-import utils.DTOActionDetailsDeserializer;
 import utils.DTOClientChosenSimulation;
 
 import java.io.Closeable;
@@ -46,7 +40,7 @@ public class AllocationsScreenController implements Closeable {
     private TableColumn<DTOClientChosenSimulation, String> endedSimulationNumber;
 
     @FXML
-    private TableColumn<DTOClientChosenSimulation, ComboBox> requestStatus;
+    private TableColumn<DTOClientChosenSimulation, String> requestStatus;
 
     @FXML
     private TableColumn<DTOClientChosenSimulation, String> runningSimulationsNumber;
@@ -64,6 +58,7 @@ public class AllocationsScreenController implements Closeable {
     private TimerTask dataRefresher;
     private Timer timer;
     private DTOClientChosenSimulation clientChosenSimulation;
+    private final ObservableList<DTOClientChosenSimulation> requestsDataObsList = FXCollections.observableArrayList();
 
 
     @FXML
@@ -79,28 +74,16 @@ public class AllocationsScreenController implements Closeable {
 
         runningSimulationsNumber.setCellValueFactory(cellData -> new SimpleIntegerProperty(0).asObject().asString());
         endedSimulationNumber.setCellValueFactory(cellData -> new SimpleIntegerProperty(0).asObject().asString());
+        allClientsRequests.setItems(requestsDataObsList);
+        allClientsRequests.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
-        requestStatus.setCellValueFactory(param -> {
-                    DTOClientChosenSimulation item = param.getValue();
-                    ComboBox<String> statusComboBox = new ComboBox<>(FXCollections.observableArrayList("Approved", "Declined"));
-
-                    statusComboBox.setValue(item.getRequestStatus());
-
-                    statusComboBox.setOnAction(event -> {
-                        handleApprovedRequest(item, statusComboBox.getValue());
-                    });
-
-            return new SimpleObjectProperty<>(statusComboBox);
-        });
-
-        allClientsRequests.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            if (newSelection != null) {
-                handleRowClick(newSelection);
+        allClientsRequests.getSelectionModel().selectedItemProperty().addListener((obs, oldSelect, newSelect) ->  {
+            if(newSelect != null) {
+                clientChosenSimulation = newSelect;
             }
         });
-
-
     }
+
 
     private void handleApprovedRequest(DTOClientChosenSimulation clientChosenSimulation, String selectedStatus) {
         //maybe sending a message if the admin sure about this approval if he does so disable the line.
@@ -108,13 +91,17 @@ public class AllocationsScreenController implements Closeable {
         String finalUrl = HttpUrl
                 .parse(Constants.REQUEST_STATUS)
                 .newBuilder()
-                .addQueryParameter("serialNumber",clientChosenSimulation.getSerialNumber())
-                .addQueryParameter("clientName",clientChosenSimulation.getClientName() )
-                .addQueryParameter("status",selectedStatus)
                 .build()
                 .toString();
 
-        HttpClientUtil.runAsync(finalUrl, new Callback() {
+        // Create the request body with parameters
+        FormBody requestBody = new FormBody.Builder()
+                .add("serialNumber", clientChosenSimulation.getSerialNumber())
+                .add("clientName", clientChosenSimulation.getClientName())
+                .add("status", selectedStatus)
+                .build();
+
+        HttpClientUtil.runAsyncPost(finalUrl, requestBody, new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 Platform.runLater(() -> {
@@ -126,14 +113,6 @@ public class AllocationsScreenController implements Closeable {
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try {
                     if (response.isSuccessful()) {
-                        String responseData = response.body().string();
-                        Gson gson = new GsonBuilder()
-                                .registerTypeAdapter(DTOActionDetails.class, new DTOActionDetailsDeserializer())
-                                .create();
-
-
-                        //Map<String, DTOSimulationDefinition> allFiles = gson.fromJson(responseData, new TypeToken<Map<String, DTOSimulationDefinition>>(){}.getType());
-
                         Platform.runLater(() -> {
                         });
                     }
@@ -153,9 +132,6 @@ public class AllocationsScreenController implements Closeable {
         alert.show();
     }
 
-    private void handleRowClick(DTOClientChosenSimulation newSelection) {
-        clientChosenSimulation = newSelection;
-    }
     public void updateTableThread() {
         dataRefresher = new AllocationTableRefresher(
                 this::updateTable
@@ -163,27 +139,33 @@ public class AllocationsScreenController implements Closeable {
         timer = new Timer();
         timer.schedule(dataRefresher, REFRESH_RATE, REFRESH_RATE);
     }
+
     public void updateTable(Map<String, DTOClientChosenSimulation> allRequests) {
         Platform.runLater(() -> {
-            for (DTOClientChosenSimulation newRequest : allRequests.values()) {
-                int index = -1;
+            for (DTOClientChosenSimulation updatedRequest : allRequests.values()) {
+                boolean found = false;
+
                 for (int i = 0; i < allClientsRequests.getItems().size(); i++) {
-                    if (newRequest.equals(allClientsRequests.getItems().get(i))) {
-                        index = i;
+                    DTOClientChosenSimulation existingItem = allClientsRequests.getItems().get(i);
+
+                    if (existingItem.getSerialNumber().equals(updatedRequest.getSerialNumber())) {
+                        allClientsRequests.getItems().set(i, updatedRequest);
+                        found = true;
                         break;
                     }
                 }
 
-                if (index != -1) {
-                    allClientsRequests.getItems().set(index, newRequest);
-                } else {
-                    allClientsRequests.getItems().add(newRequest);
+                if (!found) {
+                    allClientsRequests.getItems().add(updatedRequest);
                 }
             }
 
-            allClientsRequests.getItems().removeIf(clientChosenSimulation -> !allRequests.containsValue(clientChosenSimulation));
+            if (clientChosenSimulation != null) {
+                allClientsRequests.getSelectionModel().select(clientChosenSimulation);
+            }
         });
     }
+
 
     public void setMainController(BodyController bodyController) {
         mainController = bodyController;
@@ -195,5 +177,18 @@ public class AllocationsScreenController implements Closeable {
             dataRefresher.cancel();
             timer.cancel();
         }
+    }
+
+    public void approveClicked(MouseEvent mouseEvent) {
+        handleApprovedRequest(allClientsRequests.getSelectionModel().getSelectedItem(), "Approved");
+    }
+
+    private void handleStatusRequest(String newStatus) {
+
+    }
+
+
+    public void declineClicked(MouseEvent mouseEvent) {
+        handleApprovedRequest(clientChosenSimulation, "Declined");
     }
 }

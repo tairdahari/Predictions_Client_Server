@@ -1,11 +1,11 @@
 package servlets.newExecutionScreen;
 
 import com.google.gson.Gson;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import prediction.clientRequest.ClientRequest;
 import prediction.manager.IEngineManager;
 import prediction.worldManager.IWorldManager;
 import utils.DTOExecutionLists;
@@ -19,7 +19,7 @@ import java.util.List;
 @WebServlet(name = "startExecutionServlet", urlPatterns = "/startExecution")
 public class startExecutionServlet extends HttpServlet {
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Gson gson = new Gson();
 
         // Read the JSON data from the request's input stream
@@ -39,9 +39,12 @@ public class startExecutionServlet extends HttpServlet {
 
         IEngineManager engineManager = ServletUtils.getEngineManager(getServletContext());
         String id = request.getParameter("id");
+        String serialNumber = request.getParameter("serialNumber");
+        ClientRequest clientRequest = engineManager.getRequestsManager().getAllRequests().get(Integer.parseInt(serialNumber));
+
         IWorldManager worldManager = engineManager.getWorldFromFilesById(id);
         worldManager.initPopulation(populationList);
-        worldManager.initialization(userEnvVarChoices);
+        worldManager.initialization(userEnvVarChoices, clientRequest.getTerminationManager());
         worldManager.start(populationList, userEnvVarChoices, engineManager.getThreadPoolExecutor());
 
         DTOSimulationDefinition dtoSimulationDefinition = worldManager.getSimulationDefinition();

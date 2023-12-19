@@ -62,6 +62,9 @@ public class ExecutionDetailsController {
         this.resultsScreenController = resultsScreenController;
     }
 
+    public ResultsScreenController getResultsScreenController() {
+        return resultsScreenController;
+    }
     public void displaySimulationDetailsThread(DTOSimulationDetails newSelection, String simulationName) throws IOException {
         String finalUrl = HttpUrl
                 .parse(Constants.SIMULATION_DETAILS)
@@ -89,6 +92,19 @@ public class ExecutionDetailsController {
                             Boolean stop = false;
                             eSimulationState simulationState = eSimulationState.RUNNING;
 
+                            if (selectedSimulation.getInProgress().equals(eSimulationState.RUNNING) ||
+                                    selectedSimulation.getInProgress().equals(eSimulationState.PAUSED)) {
+                                loadControlButtons();
+                            } else {
+                                try {
+                                    // Add your code for the 'else' section here
+                                    loadResultFxml(simulationName);
+                                    loadErrorFxml(simulationName);
+                                } catch (IOException e) {
+                                    // Handle any exceptions
+                                }
+                            }
+
                             while (!stop && !simulationState.equals(eSimulationState.STOPPED)) {
                                 try {
                                     Gson gson = new GsonBuilder()
@@ -105,19 +121,6 @@ public class ExecutionDetailsController {
                                     simulationState = dtoSimulationDetails.getInProgress();
                                 } catch (NumberFormatException e) {
                                     throw new RuntimeException(e);
-                                }
-                            }
-
-                            if (selectedSimulation.getInProgress().equals(eSimulationState.RUNNING) ||
-                                    selectedSimulation.getInProgress().equals(eSimulationState.PAUSED)) {
-                                loadControlButtons();
-                            } else {
-                                try {
-                                    // Add your code for the 'else' section here
-                                    loadResultFxml(simulationName);
-                                    loadErrorFxml(simulationName);
-                                } catch (IOException e) {
-                                    // Handle any exceptions
                                 }
                             }
                         }
@@ -250,10 +253,11 @@ public class ExecutionDetailsController {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/clientSubComponents/results/executionDetails/controlButtons/controlButtons.fxml"));
             Parent controlButtonsContent = fxmlLoader.load();
             ControlButtonsController controller = fxmlLoader.getController();
-            controller.setCurrId(selectedSimulation.getId());
+            //controller.setCurrId(selectedSimulation.getId());
             //controller.setEngineManager(engineManager);
             controller.setMainController(this);
             buttonsVBox.getChildren().add(controlButtonsContent);
+            String s = "S";
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -267,6 +271,4 @@ public class ExecutionDetailsController {
     void reRunButtonAction(ActionEvent event) {
         resultsScreenController.isRerunClicked(selectedSimulation.getId());
     }
-
 }
-

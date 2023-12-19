@@ -22,6 +22,9 @@ public class Constants {
     public final static String LIST_WORLDS = FULL_SERVER_PATH + "/listWorlds";
     public final static String SIMULATION_DEFINITION = FULL_SERVER_PATH + "/initializeTreeView";
     public final static String START_EXECUTION = FULL_SERVER_PATH + "/startExecution";
+    public final static String PAUSE_SIMULATION = FULL_SERVER_PATH + "/pauseSimulation";
+    public final static String RESUME_SIMULATION = FULL_SERVER_PATH + "/resumeSimulation";
+    public final static String STOP_SIMULATION = FULL_SERVER_PATH + "/stopSimulation";
     public final static String INIT_TREE_DETAILS = FULL_SERVER_PATH + "/DisplayDetailsInTreeServlet";
     public final static String LOGIN_OUT_CLIENT = FULL_SERVER_PATH + "/logOutClient";
     // GSON instance

@@ -1,4 +1,4 @@
-package servlets;
+package servlets.client;
 
 import com.google.gson.Gson;
 import jakarta.servlet.ServletException;
@@ -7,26 +7,22 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import prediction.manager.IEngineManager;
+import prediction.worldManager.IWorldManager;
 import utils.ServletUtils;
 
 import java.io.IOException;
-
-
-@WebServlet(name = "RequestStatusServlet", urlPatterns = "/requestStatus")
-public class RequestStatusServlet extends HttpServlet {
+@WebServlet(name = "ClientStopSimulationServlet", urlPatterns = "/stopSimulation")
+public class ClientStopSimulationServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
         Gson gson = new Gson();
 
-        IEngineManager engineManager = ServletUtils.getEngineManager(getServletContext());
         String serialNumber = request.getParameter("serialNumber");
-        String clientName = request.getParameter("clientName");
-        String status = request.getParameter("status");
+        String simulationName = request.getParameter("simulationName");
 
-        engineManager.getUserManager().getUser(clientName).setRequestStatus(serialNumber, status);
-
-        //String listSimulationsString = gson.toJson(dtoListSimulationDetails);
+        IEngineManager engineManager = ServletUtils.getEngineManager(getServletContext());
+        IWorldManager worldManager = engineManager.getWorldFromFilesById(simulationName);
+        worldManager.stop(serialNumber);
 
         response.setStatus(HttpServletResponse.SC_OK);
     }

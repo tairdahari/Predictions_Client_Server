@@ -1,13 +1,11 @@
 package prediction.worldManager;
 
+import prediction.Termination.clientTerminationManager.TerminationByClientManager;
 import prediction.World;
 import prediction.execution.context.IContext;
-import prediction.manager.EngineManager;
-import prediction.users.UserManager;
 import utils.*;
 import xmlJavaFXReader.schema.generated.PRDWorld;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
@@ -26,7 +24,7 @@ public interface IWorldManager extends Serializable {
 
     void saveToFile(String var1) throws IOException;
     void loadFromFile(String var1) throws IOException, ClassNotFoundException;
-     void initialization(List<Object> userEnvVarChoices);
+     void initialization(List<Object> userEnvVarChoices, TerminationByClientManager terminationManager);
 
     DTOSimulationDetails getDtoSimulationDetailsByID(Integer id);
 

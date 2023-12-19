@@ -1,5 +1,6 @@
 package prediction.worldManager;
 
+import prediction.Termination.clientTerminationManager.TerminationByClientManager;
 import prediction.World;
 import prediction.action.api.IAction;
 import prediction.defenition.entity.IEntityDefinition;
@@ -133,7 +134,7 @@ public class WorldManager implements IWorldManager {
 
 
     @Override
-    public void initialization(List<Object> userEnvVarChoices) {
+    public void initialization(List<Object> userEnvVarChoices, TerminationByClientManager terminationManager) {
         IEntityInstanceManager entityInstanceManager = new EntityInstanceManagerImpl();
         SimulationGrid simulationGrid = new SimulationGrid(world.getWorldGrid().getRows(), world.getWorldGrid().getCols());
         GridManager gridManager = new GridManager(simulationGrid);
@@ -153,7 +154,7 @@ public class WorldManager implements IWorldManager {
             activeEnvironment.addPropertyInstance(new PropertyInstanceImpl(envPropertyDefinitionEntry.getValue(), userEnvVarChoices.get(listIter)));
             listIter++;
         }
-        this.context = new ContextImpl(idForSimulation, world, entityInstance, entityInstanceManager, activeEnvironment, gridManager);
+        this.context = new ContextImpl(idForSimulation, world, entityInstance, entityInstanceManager, activeEnvironment, gridManager, terminationManager);
         idForSimulation++;
     }
 
@@ -210,7 +211,7 @@ public class WorldManager implements IWorldManager {
 
     @Override
     public void start(List<Integer> populationList, List<Object> userEnvVarChoices, ThreadPoolExecutor threadPoolExecutor) {
-        simulationExecutors.put(context.getSimulationId(), new SimulationExecutor(context, simulationExecutionManager, this));
+        simulationExecutors.put(context.getSimulationId(), new SimulationExecutor(context, simulationExecutionManager, this, context.getTerminationManager()));
         threadPoolExecutor.execute(simulationExecutors.get(context.getSimulationId()));
         simulationExecutors.get(context.getSimulationId()).setPopulationList(populationList);
         simulationExecutors.get(context.getSimulationId()).setUserEnvVarChoices(userEnvVarChoices);

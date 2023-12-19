@@ -54,7 +54,7 @@ public class ClientRequest {
         return requestStatus;
     }
 
-    public void setRequestStatus(String requestStatus) {
+    public void setRequestStatusLogic(String requestStatus) {
         this.requestStatus = requestStatus;
     }
 

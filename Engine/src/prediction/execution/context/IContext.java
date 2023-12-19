@@ -1,5 +1,6 @@
 package prediction.execution.context;
 
+import prediction.Termination.clientTerminationManager.TerminationByClientManager;
 import prediction.World;
 import prediction.execution.instance.entity.IEntityInstance;
 import prediction.execution.instance.entity.manager.IEntityInstanceManager;
@@ -15,6 +16,9 @@ public interface IContext extends Serializable {
     IEntityInstance getPrimaryEntityInstance();
     World getWorld();
     void setPrimaryEntityInstance(IEntityInstance entityInstance);
+
+    TerminationByClientManager getTerminationManager();
+
     void setSecondaryEntityInstance(IEntityInstance entityInstance);
     IEntityInstance getSecondaryEntityInstance();
     void removeEntity(IEntityInstance entityInstance);
@@ -43,4 +47,6 @@ public interface IContext extends Serializable {
      void setEntityQuantities(Integer tick, Integer quantity);
 
     Map<Integer, Integer> getEntityQuantities();
+
+
 }

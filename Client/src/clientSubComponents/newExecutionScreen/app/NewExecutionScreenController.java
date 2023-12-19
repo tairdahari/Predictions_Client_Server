@@ -14,19 +14,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.control.Button;
-
-
-import javafx.scene.layout.VBox;
-import javafx.util.Pair;
 import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
 import util.Constants;
 import util.http.HttpClientUtil;
 import utils.*;
-
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -44,6 +39,7 @@ public class NewExecutionScreenController {
     private Thread thread;
     private DTOExecutionLists dtoExecutionListsDataMember;
     private String simulationName;
+    private String serialNumber;
 
     @FXML
     private BorderPane newExecutionScreenComponent;
@@ -99,6 +95,7 @@ public class NewExecutionScreenController {
                             DTOSimulationDefinition dtoSimulationDefinition = gson.fromJson(responseData, DTOSimulationDefinition.class);
 
                             Platform.runLater(() -> {
+
                                 populationDetailsController.setMaxCountLabel(dtoSimulationDefinition.getDtoGridDefinition().getSize());
                                 populationDetailsController.setEntities(dtoSimulationDefinition.getDtoEntityDefinition());
                                 detailsHbox.getChildren().add(populationDetailsUI);
@@ -179,66 +176,113 @@ public class NewExecutionScreenController {
 
     }
 
-    private void startClicked() {
-        // Serialize dtoExecutionListsDataMember to JSON
-        Gson gson = new Gson();
-        String dtoJson = gson.toJson(dtoExecutionListsDataMember);
+//    private void startClicked() {
+//        // Serialize dtoExecutionListsDataMember to JSON
+//        Gson gson = new Gson();
+//        String dtoJson = gson.toJson(dtoExecutionListsDataMember);
+//
+//        String id = mainBodyComponentController.getSimulationSerialNumber();
+//        Pair<String, RequestBody> urlAndBody = buildFinalUrlAndBody(id);
+//        String finalUrl = urlAndBody.getKey();
+//        RequestBody requestBody = urlAndBody.getValue();
+//
+//        Request request = new Request.Builder()
+//                .url(finalUrl)
+//                .post(requestBody)
+//                .build();
+//
+//        // Send the request asynchronously
+//        HttpClientUtil.runAsyncPost(finalUrl, requestBody, new Callback() {
+//            @Override
+//            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+//                Platform.runLater(() -> {
+//                    handleFailure(e.getMessage());
+//                });
+//            }
+//
+//            @Override
+//            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+//                try {
+//                    if (response.isSuccessful()) {
+//                        String responseData = response.body().string();
+//                        Platform.runLater(() -> {
+//                            mainBodyComponentController.startClicked();
+//                        });
+//                    } else {
+//                        // Handle non-successful response if needed
+//                    }
+//                } finally {
+//                    // If there are any cleanup or resource release tasks, you can put them here
+//                    response.close();
+//                }
+//            }
+//        });
+//    }
+//    private Pair<String, RequestBody> buildFinalUrlAndBody(String id) {
+//        String finalUrl;
+//                finalUrl = HttpUrl
+//                .parse(Constants.START_EXECUTION)
+//                .toString();
+//
+//
+//        RequestBody body =
+//                new MultipartBody.Builder()
+//                        .addFormDataPart("id", id, RequestBody.create(id, MediaType.parse("text/plain")))
+//                        .build();
+//        return new Pair<>(finalUrl, body);
+//    }
+private void startClicked() {
+    // Serialize dtoExecutionListsDataMember to JSON
+    Gson gson = new Gson();
+    String dtoJson = gson.toJson(dtoExecutionListsDataMember);
 
-        // Build the URL
-        // No need to add query parameters here
+    // Build the URL
+    String id = simulationName;
+    String serialNumber = getSerialNumber();
+    // String id = mainBodyComponentController.getSimulationSerialNumber();
+    String finalUrl = HttpUrl.parse(Constants.START_EXECUTION)
+            .newBuilder()
+            .addQueryParameter("id", id)
+            .addQueryParameter("serialNumber", serialNumber)
+            .build()
+            .toString();
 
-        // Create an HTTP request with the JSON payload
-        //RequestBody requestBody = RequestBody.create(MediaType.get("application/json"), dtoJson);
-        String id = null; //TODO getID
-        Pair<String, RequestBody> urlAndBody = buildFinalUrlAndBody(id);
-        String finalUrl = urlAndBody.getKey();
-        RequestBody requestBody = urlAndBody.getValue();
+    // Create the request body with the serialized JSON data
+    RequestBody requestBody = RequestBody.create(dtoJson, MediaType.get("application/json"));
 
-        Request request = new Request.Builder()
-                .url(finalUrl)
-                .post(requestBody)
-                .build();
+    // Build the final request
+    Request request = new Request.Builder()
+            .url(finalUrl)
+            .post(requestBody)
+            .build();
 
-        // Send the request asynchronously
-        HttpClientUtil.runAsyncPost(finalUrl, requestBody, new Callback() {
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                Platform.runLater(() -> {
-                    handleFailure(e.getMessage());
-                });
-            }
+    // Send the request asynchronously
+    HttpClientUtil.runAsyncPost(finalUrl, requestBody, new Callback() {
+        @Override
+        public void onFailure(@NotNull Call call, @NotNull IOException e) {
+            Platform.runLater(() -> {
+                handleFailure(e.getMessage());
+            });
+        }
 
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                try {
-                    if (response.isSuccessful()) {
-                        String responseData = response.body().string();
-                        Platform.runLater(() -> {
-                            mainBodyComponentController.startClicked();
-                        });
-                    } else {
-                        // Handle non-successful response if needed
-                    }
-                } finally {
-                    // If there are any cleanup or resource release tasks, you can put them here
-                    response.close();
+        @Override
+        public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+            try {
+                if (response.isSuccessful()) {
+                    String responseData = response.body().string();
+                    Platform.runLater(() -> {
+                        mainBodyComponentController.startClicked();
+                    });
+                } else {
+                    // Handle non-successful response if needed
                 }
+            } finally {
+                // If there are any cleanup or resource release tasks, you can put them here
+                response.close();
             }
-        });
-    }
-    private Pair<String, RequestBody> buildFinalUrlAndBody(String id) {
-        String finalUrl;
-                finalUrl = HttpUrl
-                .parse(Constants.START_EXECUTION)
-                .toString();
-
-
-        RequestBody body =
-                new MultipartBody.Builder()
-                        .addFormDataPart("id", id, RequestBody.create(id, MediaType.parse("text/plain")))
-                        .build();
-        return new Pair<>(finalUrl, body);
-    }
+        }
+    });
+}
 
 
     private void createLists() {
@@ -343,4 +387,11 @@ public class NewExecutionScreenController {
         return detailsHbox;
     }
 
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
+    }
+
+    public String getSerialNumber() {
+        return serialNumber;
+    }
 }

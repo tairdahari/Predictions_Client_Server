@@ -70,4 +70,6 @@ public class DTOClientChosenSimulation {
     public String getTermination() {
         return termination;
     }
+
+
 }

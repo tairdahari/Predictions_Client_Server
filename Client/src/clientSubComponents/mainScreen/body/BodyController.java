@@ -48,6 +48,8 @@ public class BodyController {
     private SimpleBooleanProperty requestButtonProperty;
     private Event event;
     private Image image;
+    private String simulationSerialNumber;
+    private String simulationName;
 
 
     public BodyController()
@@ -179,5 +181,22 @@ public class BodyController {
 
     public void openTabNewExecution() {
         optionsTabPane.getSelectionModel().select(newExecutionButton);
+    }
+
+
+    public String getSimulationSerialNumber() {
+        return simulationSerialNumber;
+    }
+
+    public void setSimulationSerialNumber(String simulationSerialNumber) {
+        this.simulationSerialNumber = simulationSerialNumber;
+    }
+
+    public String getSimulationName() {
+        return simulationName;
+    }
+
+    public void setSimulationName(String simulationName) {
+        this.simulationName = simulationName;
     }
 }
