@@ -94,11 +94,14 @@ public class ExecutionDetailsController {
 
                             if (selectedSimulation.getInProgress().equals(eSimulationState.RUNNING) ||
                                     selectedSimulation.getInProgress().equals(eSimulationState.PAUSED)) {
-                                loadControlButtons();
+                                // Load control buttons on the JavaFX Application Thread
+                                Platform.runLater(() -> {
+                                    loadControlButtons();
+                                });
                             } else {
                                 try {
                                     // Add your code for the 'else' section here
-                                    loadResultFxml(simulationName);
+                                    loadResultFxml(simulationName );
                                     loadErrorFxml(simulationName);
                                 } catch (IOException e) {
                                     // Handle any exceptions
@@ -112,6 +115,7 @@ public class ExecutionDetailsController {
                                             .create();
                                     DTOSimulationDetails dtoSimulationDetails = gson.fromJson(responseData, DTOSimulationDetails.class);
 
+                                    // Update UI on the JavaFX Application Thread
                                     Platform.runLater(() -> {
                                         setEntitiesTable(dtoSimulationDetails.getDtoEntityListExecution());
                                         runTimeLabel.setText(dtoSimulationDetails.getCurrTime());
@@ -129,6 +133,8 @@ public class ExecutionDetailsController {
                     response.close();
                 }
             }
+
+
         });
     }
 
@@ -209,7 +215,8 @@ public class ExecutionDetailsController {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/clientSubComponents/results/executionResult/executionResult.fxml"));
         Parent executionResultContent = fxmlLoader.load();
         ExecutionResultController resultController = fxmlLoader.getController();
-
+        resultController.setSerialNumber(this.resultsScreenController.getMainBodyComponentController().getSimulationSerialNumber());
+        resultController.setSimulationName(this.resultsScreenController.getMainBodyComponentController().getSimulationName());
         String finalUrl = HttpUrl
                 .parse(Constants.SIMULATION_DEFINITION)
                 .newBuilder()
@@ -256,8 +263,9 @@ public class ExecutionDetailsController {
             //controller.setCurrId(selectedSimulation.getId());
             //controller.setEngineManager(engineManager);
             controller.setMainController(this);
+            System.out.println("hykhjhkhkj");
+
             buttonsVBox.getChildren().add(controlButtonsContent);
-            String s = "S";
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

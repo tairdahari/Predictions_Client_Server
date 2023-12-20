@@ -35,9 +35,6 @@ public class ResultsScreenController {
         this.mainBodyComponentController = mainBodyController;
     }
 
-//    public void setEngineManager(IEngineManager engineManager) {
-//        this.engineManager = engineManager;
-//    }
     public void clearExecutionDetails() {
         executionDetailsBox.getChildren().clear();
     }
@@ -54,6 +51,7 @@ public class ResultsScreenController {
             this.executionListController = controller;
             executionListController.setMainController(this);
             executionListController.setSimulationName(simulationName);
+            executionListController.setSerialNumber(mainBodyComponentController.getSimulationSerialNumber());
             //executionListController.setEngineManager(engineManager);
             executionListController.refresherExecutionList(id);
             //executionListController.updateListThread();

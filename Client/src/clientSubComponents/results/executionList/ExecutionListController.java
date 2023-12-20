@@ -45,6 +45,8 @@ public class ExecutionListController implements Initializable, Closeable {
     private TimerTask dataRefresher;
     private String simulationName;
     private volatile boolean updating = true; // Use a flag to control updating
+    private String serialNumber;
+
     public ExecutionListController() {
     }
 
@@ -116,5 +118,13 @@ public class ExecutionListController implements Initializable, Closeable {
 
     public void setSimulationName(String id) {
         simulationName = id;
+    }
+
+    public void setSerialNumber(String simulationSerialNumber) {
+        this.serialNumber = simulationSerialNumber;
+    }
+
+    public String getSerialNumber() {
+        return serialNumber;
     }
 }
