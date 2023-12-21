@@ -5,12 +5,15 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import prediction.clientRequest.ClientRequest;
+import prediction.execution.runner.eSimulationState;
 import prediction.manager.IEngineManager;
-import prediction.worldManager.IWorldManager;
 import utils.DTOListSimulationDetails;
+import utils.DTOSimulationDetails;
 import utils.ServletUtils;
 
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet(name = "ListSimulationsExecutionServlet", urlPatterns = "/listSimulationsExecution")
 public class ListSimulationsExecutionServlet extends HttpServlet {
@@ -19,10 +22,22 @@ public class ListSimulationsExecutionServlet extends HttpServlet {
         Gson gson = new Gson();
 
         IEngineManager engineManager = ServletUtils.getEngineManager(getServletContext());
-        String type = request.getParameter("userName"); // Retrieve the "type" parameter
-        String id = request.getParameter("id"); // Retrieve the "type" parameter
+        String id = request.getParameter("id");
 
         DTOListSimulationDetails dtoListSimulationDetails = engineManager.getWorldFromFilesById(id).getAllSimulationsExecution();
+        List<DTOSimulationDetails> allSimulations =  dtoListSimulationDetails.getDtoSimulationDetailsList();
+
+        for(DTOSimulationDetails simulationDetails : allSimulations) {
+           if(simulationDetails.getInProgress() == eSimulationState.STOPPED) {
+               String serialNumber = simulationDetails.getId();
+               ClientRequest clientRequest =engineManager.getRequestsManager().getAllRequests().get(Integer.parseInt(serialNumber));
+
+               if(!clientRequest.isStopBoolean()) {
+                   clientRequest.setEndedSimulationNumber();
+                   clientRequest.setStopBoolean(true);
+               }
+           }
+        }
 
         String listSimulationsString = gson.toJson(dtoListSimulationDetails);
 

@@ -38,11 +38,13 @@ public class startExecutionServlet extends HttpServlet {
         List<Object> userEnvVarChoices = dtoExecutionLists.getEnvList();
 
         IEngineManager engineManager = ServletUtils.getEngineManager(getServletContext());
+
         String id = request.getParameter("id");
         String serialNumber = request.getParameter("serialNumber");
         ClientRequest clientRequest = engineManager.getRequestsManager().getAllRequests().get(Integer.parseInt(serialNumber));
-
+        clientRequest.setRunningSimulationsNumber();
         IWorldManager worldManager = engineManager.getWorldFromFilesById(id);
+
         worldManager.initPopulation(populationList);
         worldManager.initialization(userEnvVarChoices, clientRequest.getTerminationManager());
         worldManager.start(populationList, userEnvVarChoices, engineManager.getThreadPoolExecutor());

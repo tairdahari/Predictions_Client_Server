@@ -10,8 +10,8 @@ public class DTOClientChosenSimulation {
     private String simulationName;
     private String amountToRun;
     private String requestStatus;
-    private String runningSimulationsNumber = "0";
-    private String endedSimulationNumber = "0";
+    private String runningSimulationsNumber;
+    private String endedSimulationNumber;
     private String clientName;
     private String termination;
 

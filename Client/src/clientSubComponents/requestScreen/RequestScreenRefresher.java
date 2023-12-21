@@ -51,8 +51,10 @@ public class RequestScreenRefresher extends TimerTask {
                     if (response.isSuccessful()) {
                         String responseData = response.body().string();
 
-                        Map<String, DTOClientChosenSimulation> allOneClientRequests = new Gson().fromJson(responseData, new TypeToken<Map<String, DTOClientChosenSimulation>>(){}.getType());
-                        mapAllRequestsConsumer.accept(allOneClientRequests);
+                        Platform.runLater(() -> {
+                            Map<String, DTOClientChosenSimulation> allOneClientRequests = new Gson().fromJson(responseData, new TypeToken<Map<String, DTOClientChosenSimulation>>(){}.getType());
+                            mapAllRequestsConsumer.accept(allOneClientRequests);
+                        });
                     }}finally {
                     response.close();
                 }

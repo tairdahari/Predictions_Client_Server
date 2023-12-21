@@ -1,7 +1,6 @@
 package subComponents.allocationsScreen.app;
 
 import javafx.application.Platform;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -72,8 +71,6 @@ public class AllocationsScreenController implements Closeable {
         clientName.setCellValueFactory(new PropertyValueFactory<>("clientName"));
         termination.setCellValueFactory(new PropertyValueFactory<>("termination"));
 
-        runningSimulationsNumber.setCellValueFactory(cellData -> new SimpleIntegerProperty(0).asObject().asString());
-        endedSimulationNumber.setCellValueFactory(cellData -> new SimpleIntegerProperty(0).asObject().asString());
         allClientsRequests.setItems(requestsDataObsList);
         allClientsRequests.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 

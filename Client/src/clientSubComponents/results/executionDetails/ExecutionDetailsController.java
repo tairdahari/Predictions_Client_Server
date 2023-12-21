@@ -24,6 +24,8 @@ import utils.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class ExecutionDetailsController {
     @FXML
@@ -51,7 +53,9 @@ public class ExecutionDetailsController {
 
     private ResultsScreenController resultsScreenController;
 
-    private Thread thread;
+    private Timer timer;
+    private TimerTask dataRefresher;
+    private String simulationName;
 
     @FXML
     public void initialize() {
@@ -138,6 +142,14 @@ public class ExecutionDetailsController {
         });
     }
 
+//    public void refresherExecutionList(String id) {
+//        dataRefresher = new ExecutionListRefresher(
+//                resultsScreenController.getMainBodyComponentController().getMainController().currentUserNameProperty().getValue(),
+//                this::updateListExecution
+//                , id);
+//        timer = new Timer();
+//        timer.schedule(dataRefresher, REFRESH_RATE, REFRESH_RATE);
+//    }
 
     public void handleFailure(String errorMessage){
         Alert alert = new Alert(Alert.AlertType.ERROR);

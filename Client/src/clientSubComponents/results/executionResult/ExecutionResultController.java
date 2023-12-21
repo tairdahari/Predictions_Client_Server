@@ -102,8 +102,9 @@ public class ExecutionResultController {
                             String responseData = response.body().string();
                             Gson gson = new Gson();
                             DTOPropertyHistogram histogramData = gson.fromJson(responseData, DTOPropertyHistogram.class);
-
-                            getHistogram(histogramData, selectedProperty);
+                            Platform.runLater(() -> {
+                                getHistogram(histogramData, selectedProperty);
+                            });
                         }
                     } finally {
                         response.close();

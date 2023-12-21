@@ -14,8 +14,9 @@ public class ClientRequest {
     private final TerminationByClientManager terminationManager;
     private Integer serialNumber;
     private String requestStatus;
-    private Integer runningSimulationsNumber;
-    private Integer endedSimulationNumber;
+    private Integer runningSimulationsNumber = 0;
+    private Integer endedSimulationNumber = 0;
+    private boolean stopBoolean = false;
 
 
     public ClientRequest(Integer requestSerialNumber, User user, String simulationName, String numOfSimulationsToRun, List<DTOTerminationByClient> termination) {
@@ -62,15 +63,24 @@ public class ClientRequest {
         return runningSimulationsNumber;
     }
 
-    public void setRunningSimulationsNumber(Integer runningSimulationsNumber) {
-        this.runningSimulationsNumber = runningSimulationsNumber;
+    public void setRunningSimulationsNumber() {
+        this.runningSimulationsNumber++;
     }
 
     public Integer getEndedSimulationNumber() {
         return endedSimulationNumber;
     }
 
-    public void setEndedSimulationNumber(Integer endedSimulationNumber) {
-        this.endedSimulationNumber = endedSimulationNumber;
+    public void setEndedSimulationNumber() {
+        this.endedSimulationNumber++;
+        this.runningSimulationsNumber--;
+    }
+
+    public boolean isStopBoolean() {
+        return stopBoolean;
+    }
+
+    public void setStopBoolean(boolean stopBoolean) {
+        this.stopBoolean = stopBoolean;
     }
 }

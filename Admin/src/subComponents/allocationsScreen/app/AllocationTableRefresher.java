@@ -48,9 +48,10 @@ public class AllocationTableRefresher extends TimerTask {
                 try{
                     if (response.isSuccessful()) {
                         String responseData = response.body().string();
-
-                        Map<String, DTOClientChosenSimulation> allRequests = new Gson().fromJson(responseData, new TypeToken<Map<String, DTOClientChosenSimulation>>(){}.getType());
-                        mapAllRequestsConsumer.accept(allRequests);
+                        Platform.runLater(() -> {
+                            Map<String, DTOClientChosenSimulation> allRequests = new Gson().fromJson(responseData, new TypeToken<Map<String, DTOClientChosenSimulation>>(){}.getType());
+                            mapAllRequestsConsumer.accept(allRequests);
+                        });
                     }}finally {
                     response.close();
                 }

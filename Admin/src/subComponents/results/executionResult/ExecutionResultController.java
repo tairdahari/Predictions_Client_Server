@@ -117,14 +117,12 @@ public class ExecutionResultController {
             String propertyValue = entry.getKey();
             int frequency = entry.getValue();
 
-            // Parse the property value as a Double (assuming it's a numerical property)
             Double numericValue = Double.parseDouble(propertyValue);
 
             totalFrequency += frequency;
             totalValue += frequency * numericValue;
         }
 
-        // Calculate the average value
         if (totalFrequency > 0) {
             return totalValue / (double) totalFrequency;
         } else {

@@ -5,7 +5,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import javafx.application.Platform;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -84,9 +83,8 @@ public class RequestScreenController implements Closeable {
         runningSimulationsNumber.setCellValueFactory(new PropertyValueFactory<>("runningSimulationsNumber"));
         endedSimulationNumber.setCellValueFactory(new PropertyValueFactory<>("endedSimulationNumber"));
 
-        runningSimulationsNumber.setCellValueFactory(cellData -> new SimpleIntegerProperty(0).asObject().asString());
-        endedSimulationNumber.setCellValueFactory(cellData -> new SimpleIntegerProperty(0).asObject().asString());
-       // requestStatus.setCellValueFactory(cellData -> new SimpleStringProperty("Waiting"));
+//        runningSimulationsNumber.setCellValueFactory(cellData -> new SimpleIntegerProperty(0).asObject().asString());
+//        endedSimulationNumber.setCellValueFactory(cellData -> new SimpleIntegerProperty(0).asObject().asString());
         setSpinners();
 
         allClientsRequests.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
@@ -210,7 +208,6 @@ public class RequestScreenController implements Closeable {
                 mainController.getMainController().currentUserNameProperty().getValue());
         timer = new Timer();
         timer.schedule(dataRefresher, REFRESH_RATE, REFRESH_RATE);
-
     }
     private void setAllRequestsTable(Map<String, DTOClientChosenSimulation> allRequests) {
         Platform.runLater(() -> {
