@@ -48,6 +48,18 @@ public class NewExecutionScreenController {
 
     @FXML
     public void initialize(){
+        if(environmentDetailsController != null && populationDetailsController != null) {
+            environmentDetailsController.getOneEnvHBox().getChildren().clear();
+            populationDetailsController.getPopulationVboxComponent().getChildren().clear();
+        }
+    }
+
+    public EnvironmentDetailsController getEnvironmentDetailsController() {
+        return environmentDetailsController;
+    }
+
+    public PopulationDetailsController getPopulationDetailsController() {
+        return populationDetailsController;
     }
 
     public void setMainController(BodyController mainBodyController) {
@@ -68,6 +80,7 @@ public class NewExecutionScreenController {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/clientSubComponents/newExecutionScreen/populationDetails/populationDetails.fxml"));
             Parent populationDetailsUI = fxmlLoader.load();
             PopulationDetailsController populationDetailsController = fxmlLoader.getController();
+            populationDetailsController.getPopulationVboxComponent().getChildren().clear();
             populationDetailsController.setNewExecutionScreenController(this);
 
             String finalUrl = HttpUrl
@@ -95,7 +108,6 @@ public class NewExecutionScreenController {
                             DTOSimulationDefinition dtoSimulationDefinition = gson.fromJson(responseData, DTOSimulationDefinition.class);
 
                             Platform.runLater(() -> {
-
                                 populationDetailsController.setMaxCountLabel(dtoSimulationDefinition.getDtoGridDefinition().getSize());
                                 populationDetailsController.setEntities(dtoSimulationDefinition.getDtoEntityDefinition());
                                 detailsHbox.getChildren().add(populationDetailsUI);
@@ -129,6 +141,7 @@ public class NewExecutionScreenController {
             Parent envDetailsUI = fxmlLoader.load();
             EnvironmentDetailsController environmentDetailsController = fxmlLoader.getController();
             this.environmentDetailsController = environmentDetailsController;
+            environmentDetailsController.getOneEnvHBox().getChildren().clear();
             environmentDetailsController.setNewExecutionScreenController(this);
 
             String finalUrl = HttpUrl

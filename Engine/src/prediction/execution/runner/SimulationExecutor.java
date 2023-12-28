@@ -56,8 +56,6 @@ public class SimulationExecutor implements Runnable {
     public void run() {
         int currentTick = 0;
         Thread thread= Thread.currentThread();
-
-
         LocalDateTime currentDateTime = LocalDateTime.now();
 
         ISimulationDetails simulationDetails = new SimulationDetails(currentDateTime, context.getSimulationId(), this.context);

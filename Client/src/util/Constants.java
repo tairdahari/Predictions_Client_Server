@@ -15,6 +15,7 @@ public class Constants {
     public final static String SIMULATION_DETAILS = FULL_SERVER_PATH + "/simulationDetails";
     public final static String CLIENT_REQUEST = FULL_SERVER_PATH + "/clientRequest";
     public final static String MAP_CLIENT_REQUESTS = FULL_SERVER_PATH + "/allClientRequests";
+    public final static String ENTITY_QUANTITY = FULL_SERVER_PATH + "/entityQuantity";
     public final static String ERROR_MESSAGE = FULL_SERVER_PATH + "/errorMessage";
     public final static String LIST_SIMULATIONS_EXECUTION = FULL_SERVER_PATH + "/listSimulationsExecution";
     public final static String RERUN_EXECUTION = FULL_SERVER_PATH + "/inputForRerunExecution";

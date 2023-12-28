@@ -21,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import util.Constants;
 import util.http.HttpClientUtil;
 import utils.DTOEntityDefinition;
+import utils.DTOEntityQuantities;
 import utils.DTOPropertyDefinition;
 import utils.DTOPropertyHistogram;
 
@@ -210,7 +211,36 @@ public class ExecutionResultController {
 
     @FXML
     void handleLoadButton(ActionEvent event) {
-        //displayEntityQuantityGraph(engineManager.getContext().getEntityQuantities());
+        String finalUrl = HttpUrl
+                .parse(Constants.ENTITY_QUANTITY)
+                .newBuilder()
+                .addQueryParameter("simulationName", simulationName)
+                .build()
+                .toString();
+
+        HttpClientUtil.runAsync(finalUrl, new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                Platform.runLater(() -> {
+                    handleFailure(e.getMessage());
+                });
+            }
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                try {
+                    if (response.isSuccessful()) {
+                        String responseData = response.body().string();
+                        Gson gson = new Gson();
+                        Platform.runLater(() -> {
+                            DTOEntityQuantities dtoEntityQuantities = gson.fromJson(responseData, DTOEntityQuantities.class);
+                            displayEntityQuantityGraph(dtoEntityQuantities.getDtoEntityQuantities());
+                        });
+                    }
+                } finally {
+                    response.close();
+                }
+            }
+        });
     }
 
     public void displayEntityQuantityGraph(Map<Integer, Integer> entityQuantities) {

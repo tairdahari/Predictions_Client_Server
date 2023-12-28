@@ -17,14 +17,17 @@ import org.jetbrains.annotations.NotNull;
 import subComponents.mainScreen.header.HeaderController;
 import util.Constants;
 import util.http.HttpClientUtil;
-import utils.DTOEntityDefinition;
 import utils.DTOFileUpload;
-
+import utils.DTOQueue;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import static util.Constants.REFRESH_RATE;
 
 public class HeaderBodyController {
     //private IEngineManager engineManager;
@@ -40,6 +43,8 @@ public class HeaderBodyController {
     private SimpleBooleanProperty isFileCorrectProperty;
     private Thread thread;
     private boolean isFirstFile = true;
+    private Timer timer;
+    private TimerTask queueRefresher;
 
     public HeaderBodyController() {
         loadFileButtonProperty = new SimpleBooleanProperty(false);
@@ -116,12 +121,46 @@ public class HeaderBodyController {
                                 statusFileXML.setVisible(true);
                             }
                         });
+                        refresherQueue();
+
                     }}finally {
                     response.close();
                 }
             }
         });
     }
+
+//    public void updateQueue() {
+//        String finalUrl = HttpUrl
+//                .parse(Constants.QUEUE_DATA)
+//                .newBuilder()
+//                .build()
+//                .toString();
+//
+//        HttpClientUtil.runAsync(finalUrl, new Callback() {
+//            @Override
+//            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+//                Platform.runLater(() -> {
+//                    handleFailure(e.getMessage());
+//                });
+//            }
+//            @Override
+//            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+//                try {
+//                    if (response.isSuccessful()) {
+//                        String responseData = response.body().string();
+//                        Gson gson = new Gson();
+//                        Platform.runLater(() -> {
+//                            DTOQueue dtoQueue = gson.fromJson(responseData, DTOQueue.class);
+//                            mainHeaderController.getMainController().getBodyComponentController().getManagementScreenComponentController().queueUpdate(dtoQueue);
+//                        });
+//                    }
+//                } finally {
+//                    response.close();
+//                }
+//            }
+//        });
+//    }
 
     private boolean dtoFileUploadExist(DTOFileUpload dtoFileUpload) {
          for(DTOFileUpload file :filesListDto) {
@@ -130,6 +169,13 @@ public class HeaderBodyController {
              }
          }
          return false;
+    }
+    public void handleFailure(String errorMessage){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error In The Server");
+        alert.setContentText(errorMessage);
+        alert.setWidth(300);
+        alert.show();
     }
 
     private Pair<String, RequestBody> buildFinalUrlAndBody(boolean isFirstFile, File selectedFile) {
@@ -189,6 +235,19 @@ public class HeaderBodyController {
 
     public Button getLoadFileButton() {
         return loadFileButton;
+    }
+
+    public void refresherQueue() {
+        queueRefresher = new QueueRefresher(
+                this::updateQueueData
+                );
+        timer = new Timer();
+        timer.schedule(queueRefresher, REFRESH_RATE, REFRESH_RATE);
+    }
+    private void updateQueueData(DTOQueue dtoQueue) {
+        Platform.runLater(() -> {
+            mainHeaderController.getMainController().getBodyComponentController().getManagementScreenComponentController().queueUpdate(dtoQueue);
+        });
     }
 
 }

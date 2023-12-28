@@ -19,11 +19,12 @@ public class EngineManager implements IEngineManager {
     private UserManager userManager;
     private RequestsManager requestsManager;
     private ThreadPoolExecutor threadPoolExecutor;
+    private Integer threadPoolSizeByUser;
 
     public EngineManager() {
         this.userManager = new UserManager();
         this.requestsManager = new RequestsManager(userManager);
-        this.threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(1);//TODO change the sie of threadpool
+        this.threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(7);//TODO change the sie of threadpool
     }
 
     @Override
@@ -78,5 +79,13 @@ public class EngineManager implements IEngineManager {
     @Override
     public void setRequestsManager(RequestsManager requestsManager) {
         this.requestsManager = requestsManager;
+    }
+
+    public Integer getThreadPoolSizeByUser() {
+        return threadPoolSizeByUser;
+    }
+
+    public void setThreadPoolSizeByUser(Integer threadPoolSizeByUser) {
+        this.threadPoolSizeByUser = threadPoolSizeByUser;
     }
 }

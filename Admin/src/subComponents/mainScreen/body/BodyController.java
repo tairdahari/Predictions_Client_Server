@@ -93,6 +93,10 @@ public class BodyController {
         executionsHistoryScreenComponentController.clearExecutionResults();
     }
 
+    public ManagementScreenController getManagementScreenComponentController() {
+        return managementScreenComponentController;
+    }
+
     @FXML
     void managementButtonAction(Event event) {
             List<DTOFileUpload> dtoFileUploadList =mainController.getHeaderComponentController().getHeaderBodyComponentController().getFilesListDto();

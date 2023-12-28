@@ -28,9 +28,15 @@ public class PopulationDetailsController {
 
     @FXML
     public void initialize() {
+        this.populationVboxComponent.getChildren().clear();
         currentCountLabel.setText("0");
         Map<String,EntityCountController> entityCountControllers = new LinkedHashMap<>();
     }
+
+    public VBox getPopulationVboxComponent() {
+        return populationVboxComponent;
+    }
+
     public void applyFadeInAnimation() {
         FadeTransition fadeTransition = new FadeTransition(Duration.seconds(5), populationVboxComponent);
         fadeTransition.setFromValue(0.0); // Start with opacity 0

@@ -27,6 +27,8 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static util.Constants.REFRESH_RATE;
+
 public class ExecutionDetailsController {
     @FXML
     private VBox buttonsVBox;
@@ -56,6 +58,8 @@ public class ExecutionDetailsController {
     private Timer timer;
     private TimerTask dataRefresher;
     private String simulationName;
+    boolean isFirstStop = false;
+
 
     @FXML
     public void initialize() {
@@ -69,87 +73,65 @@ public class ExecutionDetailsController {
     public ResultsScreenController getResultsScreenController() {
         return resultsScreenController;
     }
-    public void displaySimulationDetailsThread(DTOSimulationDetails newSelection, String simulationName) throws IOException {
-        String finalUrl = HttpUrl
-                .parse(Constants.SIMULATION_DETAILS)
-                .newBuilder()
-                .addQueryParameter("simulationId", newSelection.getId())
-                .addQueryParameter("id", simulationName)
-                .build()
-                .toString();
+    public void displaySimulationDetailsThread(DTOSimulationDetails dtoSimulationDetails) {
+        selectedSimulation = dtoSimulationDetails;
+        if (selectedSimulation != null) {
+            Platform.runLater(() -> {
+                Boolean stop = false;
+                eSimulationState simulationState = eSimulationState.RUNNING;
 
-        HttpClientUtil.runAsync(finalUrl, new Callback() {
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                Platform.runLater(() -> {
-                    handleFailure(e.getMessage());
-                });
-            }
-
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                try {
-                    if (response.isSuccessful()) {
-                        String responseData = response.body().string();
-                        selectedSimulation = newSelection;
-                        if (selectedSimulation != null) {
-                            Boolean stop = false;
-                            eSimulationState simulationState = eSimulationState.RUNNING;
-
-                            if (selectedSimulation.getInProgress().equals(eSimulationState.RUNNING) ||
-                                    selectedSimulation.getInProgress().equals(eSimulationState.PAUSED)) {
-                                // Load control buttons on the JavaFX Application Thread
-                                Platform.runLater(() -> {
-                                    loadControlButtons();
-                                });
-                            } else {
-                                try {
-                                    // Add your code for the 'else' section here
-                                    loadResultFxml(simulationName );
-                                    loadErrorFxml(simulationName);
-                                } catch (IOException e) {
-                                    // Handle any exceptions
-                                }
-                            }
-
-                            while (!stop && !simulationState.equals(eSimulationState.STOPPED)) {
-                                try {
-                                    Gson gson = new GsonBuilder()
-                                            .registerTypeAdapter(DTOActionDetails.class, new DTOActionDetailsDeserializer())
-                                            .create();
-                                    DTOSimulationDetails dtoSimulationDetails = gson.fromJson(responseData, DTOSimulationDetails.class);
-
-                                    // Update UI on the JavaFX Application Thread
-                                    Platform.runLater(() -> {
-                                        setEntitiesTable(dtoSimulationDetails.getDtoEntityListExecution());
-                                        runTimeLabel.setText(dtoSimulationDetails.getCurrTime());
-                                        tickLabel.setText(dtoSimulationDetails.getCurrTick());
-                                    });
-
-                                    simulationState = dtoSimulationDetails.getInProgress();
-                                } catch (NumberFormatException e) {
-                                    throw new RuntimeException(e);
-                                }
-                            }
-                        }
-                    }
-                } finally {
-                    response.close();
+                if (!stop && !simulationState.equals(eSimulationState.STOPPED)) {
+                    setEntitiesTable(dtoSimulationDetails.getDtoEntityListExecution());
+                    runTimeLabel.setText(dtoSimulationDetails.getCurrTime());
+                    tickLabel.setText(dtoSimulationDetails.getCurrTick());
                 }
-            }
 
+                simulationState = dtoSimulationDetails.getInProgress();
 
-        });
+                // Stop the timer when needed
+                if (simulationState.equals(eSimulationState.STOPPED)) {
+                    stopTimer();
+                }
+            });
+        }
     }
 
-//    public void refresherExecutionList(String id) {
-//        dataRefresher = new ExecutionListRefresher(
-//                resultsScreenController.getMainBodyComponentController().getMainController().currentUserNameProperty().getValue(),
-//                this::updateListExecution
-//                , id);
-//        timer = new Timer();
-//        timer.schedule(dataRefresher, REFRESH_RATE, REFRESH_RATE);
-//    }
+    public void refresherExecutionList(DTOSimulationDetails newSelection, String simulationName) {
+        ckTheDetails(newSelection);
+        dataRefresher = new ExecutionDetailsRefresher(
+                this::displaySimulationDetailsThread,
+                newSelection.getId(),
+                simulationName
+        );
+        timer = new Timer();
+        timer.schedule(dataRefresher, REFRESH_RATE, REFRESH_RATE);
+    }
+
+    private void stopTimer() {
+        if (timer != null) {
+            timer.cancel();
+        }
+    }
+
+    private void ckTheDetails(DTOSimulationDetails newSelection) {
+        selectedSimulation = newSelection;
+        if (selectedSimulation != null) {
+            Platform.runLater(() -> {
+                if (selectedSimulation.getInProgress().equals(eSimulationState.RUNNING) ||
+                        selectedSimulation.getInProgress().equals(eSimulationState.PAUSED)) {
+                    loadControlButtons();
+                } else {
+                    try {
+                        // Add your code for the 'else' section here
+                        loadResultFxml(simulationName);
+                        loadErrorFxml(simulationName);
+                    } catch (IOException e) {
+                        // Handle any exceptions
+                    }
+                }
+            });
+        }
+    }
 
     public void handleFailure(String errorMessage){
         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -290,5 +272,9 @@ public class ExecutionDetailsController {
     @FXML
     void reRunButtonAction(ActionEvent event) {
         resultsScreenController.isRerunClicked(selectedSimulation.getId());
+    }
+
+    public void setSimulationName(String simulationName) {
+        this.simulationName =simulationName;
     }
 }

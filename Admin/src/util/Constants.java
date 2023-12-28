@@ -14,7 +14,7 @@ public class Constants {
     public final static String LOAD_FILE = FULL_SERVER_PATH + "/upload_file";
     public final static String REQUEST_STATUS = FULL_SERVER_PATH + "/requestStatus";
     public final static String ALL_REQUESTS = FULL_SERVER_PATH + "/allRequests";
-
+    public final static String QUEUE_DATA = FULL_SERVER_PATH + "/queueData";
     public static final String ADMIN_LOGIN  = FULL_SERVER_PATH + "/adminLogin";
     public static final String LOG_OUT_ADMIN  = FULL_SERVER_PATH + "/adminLogOut";
     public final static Gson GSON_INSTANCE = new Gson();

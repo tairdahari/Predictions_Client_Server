@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import subComponents.mainScreen.body.BodyController;
 import utils.DTOFileUpload;
+import utils.DTOQueue;
 
 import java.util.List;
 
@@ -37,11 +38,11 @@ public class ManagementScreenController {
     public ListView<String> getSimulationsList() {
         return simulationsList;
     }
-    public void queueUpdate() {
-//        DTOQueue dtoQueue = engineManager.getDtoQueue();
-//        queueSize.setText(dtoQueue.getQueueSize().toString());
-//        workingThreads.setText(dtoQueue.getWaiting().toString());
-//        completedSimulations.setText(dtoQueue.getFinished().toString());
+    public void queueUpdate(DTOQueue dtoQueue) {
+        queueSize.setText(dtoQueue.getQueueSize().toString());
+        workingThreads.setText(dtoQueue.getWaiting().toString());
+        completedSimulations.setText(dtoQueue.getFinished().toString());
+
     }
 
     public void setMainController(BodyController bodyController) {
@@ -65,6 +66,13 @@ public class ManagementScreenController {
 //
 //        }
 
+    }
+    public void handleFailure(String errorMessage){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error In The Server");
+        alert.setContentText(errorMessage);
+        alert.setWidth(300);
+        alert.show();
     }
     private void setSpinners() {
         SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Integer.MAX_VALUE);

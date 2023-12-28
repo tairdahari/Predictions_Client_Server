@@ -7,10 +7,10 @@ import prediction.execution.instance.entity.manager.IEntityInstanceManager;
 import prediction.execution.instance.enviroment.api.IActiveEnvironment;
 import prediction.execution.instance.property.IPropertyInstance;
 import prediction.execution.runner.eSimulationState;
+import utils.DTOEntityQuantities;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
 
 public interface IContext extends Serializable {
     IEntityInstance getPrimaryEntityInstance();
@@ -46,7 +46,5 @@ public interface IContext extends Serializable {
 
      void setEntityQuantities(Integer tick, Integer quantity);
 
-    Map<Integer, Integer> getEntityQuantities();
-
-
+    DTOEntityQuantities getEntityQuantities();
 }

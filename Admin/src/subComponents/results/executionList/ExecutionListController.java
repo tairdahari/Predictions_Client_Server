@@ -101,9 +101,7 @@ public class ExecutionListController {
             throw new RuntimeException(e);
         }
     }
-//    public void setEngineManager(IEngineManager engineManager) {
-//        this.engineManager = engineManager;
-//    }
+
     public void updateList(DTOListSimulationDetails allSimulationsExecution) {
         ObservableList<DTOSimulationDetails> observableList = FXCollections.observableArrayList(allSimulationsExecution.getDtoSimulationDetailsList());
         simulationsTable.setItems(observableList);

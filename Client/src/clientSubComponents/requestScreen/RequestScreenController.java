@@ -290,6 +290,7 @@ public class RequestScreenController implements Closeable {
     void executeButtonClicked(ActionEvent event) {
         if(chosenDtoClientRequest != null) {
             setNewExecutionSimulationName(chosenDtoClientRequest.getSimulationName());
+            //clear screen
             mainController.getNewExecutionScreenComponentController().getDetailsHbox().getChildren().clear();
 
             mainController.openTabNewExecution();

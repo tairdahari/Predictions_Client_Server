@@ -97,8 +97,8 @@ public class ExecutionListController implements Initializable, Closeable {
             Parent executionDetailsContent = fxmlLoader.load();
             ExecutionDetailsController controller = fxmlLoader.getController();
             controller.setMainController(resultsScreenController);
-            //controller.setSimulationName(simulationName);
-            controller.displaySimulationDetailsThread(newSelection, simulationName);
+            controller.setSimulationName(simulationName);
+            controller.refresherExecutionList(newSelection, simulationName);
             resultsScreenController.getExecutionDetailsBox().getChildren().add(executionDetailsContent);
         } catch (IOException e) {
             throw new RuntimeException(e);

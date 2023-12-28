@@ -131,7 +131,6 @@ public class BodyController {
 
     }
 
-    @FXML
     public void newExecutionButtonAction(Event event) {
         newExecutionScreenComponentController.getDetailsHbox().getChildren().clear();
         newExecutionScreenComponentController.setPopulation();

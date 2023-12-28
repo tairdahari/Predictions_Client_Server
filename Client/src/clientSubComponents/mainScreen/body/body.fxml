@@ -24,7 +24,7 @@
             </AnchorPane>
          </content>
       </Tab>
-      <Tab fx:id="newExecutionButton" disable="true" onSelectionChanged="#newExecutionButtonAction" style="-fx-font-weight: bold;" text="New Execution">
+      <Tab fx:id="newExecutionButton" disable="true" style="-fx-font-weight: bold;" text="New Execution">
          <content>
             <AnchorPane>
                <children>

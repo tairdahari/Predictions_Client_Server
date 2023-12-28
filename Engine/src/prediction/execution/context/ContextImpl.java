@@ -10,6 +10,7 @@ import prediction.execution.instance.entity.manager.IEntityInstanceManager;
 import prediction.execution.instance.enviroment.api.IActiveEnvironment;
 import prediction.execution.instance.property.IPropertyInstance;
 import prediction.execution.runner.eSimulationState;
+import utils.DTOEntityQuantities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -177,8 +178,8 @@ public class ContextImpl implements IContext {
     }
 
     @Override
-    public Map<Integer, Integer> getEntityQuantities()
+    public DTOEntityQuantities getEntityQuantities()
     {
-        return this.entityQuantities;
+        return new DTOEntityQuantities(entityQuantities);
     }
 }

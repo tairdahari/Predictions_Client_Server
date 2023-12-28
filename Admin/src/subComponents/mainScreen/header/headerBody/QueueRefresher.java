@@ -1,4 +1,4 @@
-package clientSubComponents.results.executionDetails;
+package subComponents.mainScreen.header.headerBody;
 
 import com.google.gson.Gson;
 import javafx.application.Platform;
@@ -10,31 +10,24 @@ import okhttp3.Response;
 import org.jetbrains.annotations.NotNull;
 import util.Constants;
 import util.http.HttpClientUtil;
-import utils.DTOSimulationDetails;
+import utils.DTOQueue;
 
 import java.io.IOException;
 import java.util.TimerTask;
 import java.util.function.Consumer;
 
-public class ExecutionDetailsRefresher extends TimerTask {
-    private final String simulationName;
-    private final String serialNumber;
-    private final Consumer<DTOSimulationDetails> detailsConsumer;
+public class QueueRefresher extends TimerTask {
+    private final Consumer<DTOQueue> dtoQueueConsumer;
 
-    public ExecutionDetailsRefresher(Consumer<DTOSimulationDetails> detailsConsumer, String id, String simulationName) {
-        this.simulationName = simulationName;
-        this.serialNumber = id;
-        this.detailsConsumer = detailsConsumer;
+    public QueueRefresher(Consumer<DTOQueue> dtoQueueConsumer) {
+        this.dtoQueueConsumer = dtoQueueConsumer;
+
     }
 
     @Override
     public void run() {
         String finalUrl = HttpUrl
-                .parse(Constants.SIMULATION_DETAILS)
-                .newBuilder()
-                .addQueryParameter("simulationId", serialNumber)
-                .addQueryParameter("id", simulationName)
-                .build()
+                .parse(Constants.QUEUE_DATA)
                 .toString();
 
         HttpClientUtil.runAsync(finalUrl, new Callback() {
@@ -47,12 +40,19 @@ public class ExecutionDetailsRefresher extends TimerTask {
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                String res = response.body().string();
                 try {
                     if (response.isSuccessful()) {
-                        DTOSimulationDetails dtoSimulationDetails = new Gson().fromJson(response.body().string(), DTOSimulationDetails.class);
                         Platform.runLater(() -> {
-                            detailsConsumer.accept(dtoSimulationDetails);
-                        });                    }
+                            DTOQueue dtoQueue = null;
+                            try {
+                                dtoQueue = new Gson().fromJson(res, DTOQueue.class);
+                                dtoQueueConsumer.accept(dtoQueue);
+                            } catch (Exception e) {
+                                System.out.println("asldjlsufhsfhlisjfh");
+                            }
+                        });
+                    }
                 } finally {
                     response.close();
                 }
@@ -60,7 +60,7 @@ public class ExecutionDetailsRefresher extends TimerTask {
         });
     }
 
-    public void handleFailure(String errorMessage){
+    public void handleFailure(String errorMessage) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error In The Server");
         alert.setContentText(errorMessage);

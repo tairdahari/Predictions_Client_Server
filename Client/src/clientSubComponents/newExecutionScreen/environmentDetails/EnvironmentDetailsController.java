@@ -7,14 +7,19 @@ import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListView;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import utils.DTOPropertyDefinition;
 import utils.DTOSimulationDefinition;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class EnvironmentDetailsController {
    @FXML
@@ -29,8 +34,13 @@ public class EnvironmentDetailsController {
 
     @FXML
     public void initialize() {
+        this.oneEnvHBox.getChildren().clear();
         this.environmentControllerMap =  new LinkedHashMap<>();
         this.environmentParentsrMap =  new LinkedHashMap<>();
+    }
+
+    public HBox getOneEnvHBox() {
+        return oneEnvHBox;
     }
 
     public void setListView(List<DTOPropertyDefinition> environments) {
