@@ -4,6 +4,7 @@ import prediction.clientRequest.RequestsManager;
 import prediction.users.UserManager;
 import prediction.worldManager.IWorldManager;
 import utils.DTOAllFiles;
+import utils.DTOListSimulationDetails;
 import utils.DTOQueue;
 
 import java.util.Map;
@@ -11,6 +12,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 public interface IEngineManager {
     DTOAllFiles getDTOFilesList();
+    Integer getThreadPoolSizeByUser();
+    void setThreadPoolSizeByUser(Integer threadPoolSizeByUser);
 
     ThreadPoolExecutor getThreadPoolExecutor();
 
@@ -29,4 +32,6 @@ public interface IEngineManager {
     RequestsManager getRequestsManager();
 
     void setRequestsManager(RequestsManager requestsManager);
+
+    DTOListSimulationDetails getAllEndedSimulations();
 }

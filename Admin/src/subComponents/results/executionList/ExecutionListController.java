@@ -5,6 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -14,10 +15,17 @@ import subComponents.results.executionDetails.ExecutionDetailsController;
 import utils.DTOListSimulationDetails;
 import utils.DTOSimulationDetails;
 
+import java.io.Closeable;
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import static util.Constants.REFRESH_RATE;
 
 
-public class ExecutionListController {
+public class ExecutionListController implements Initializable, Closeable {
     @FXML
     private TableView<DTOSimulationDetails> simulationsTable;
     @FXML
@@ -31,10 +39,12 @@ public class ExecutionListController {
     private ResultsScreenController resultsScreenController;
     private DTOSimulationDetails currentSimulationDetails;
     private DTOListSimulationDetails dtoListSimulationDetails;
-//    private IEngineManager engineManager;
-   // private final Logic logic = new Logic(this);
     private Thread thread;
+    private Timer timer;
+    private TimerTask dataRefresher;
+    private String simulationName;
     private volatile boolean updating = true; // Use a flag to control updating
+    private String serialNumber;
 
     public ExecutionListController() {
     }
@@ -43,8 +53,8 @@ public class ExecutionListController {
         this.resultsScreenController = resultsScreenController;
     }
 
-    @FXML
-    public void initialize(){
+    @Override
+    public void initialize(URL location, ResourceBundle resources){
         id.setCellValueFactory(new PropertyValueFactory<DTOSimulationDetails, String>("id"));
         inProgress.setCellValueFactory(new PropertyValueFactory<DTOSimulationDetails, String>("inProgress"));
         startTime.setCellValueFactory(new PropertyValueFactory<DTOSimulationDetails, String>("startTime"));
@@ -56,27 +66,17 @@ public class ExecutionListController {
             }
         });
     }
-    public void updateListThread() {
-        int SLEEP_TIME = 200;
-
-        thread= new Thread(()->{
-            while(true) {
-                try {
-                    if (updating) {
-                        dtoListSimulationDetails = null;
-                        //dtoListSimulationDetails = engineManager.getAllSimulationsExecution();
-                        Platform.runLater(() -> {
-                            updateList(dtoListSimulationDetails);
-                        });
-                    }
-                    Thread.sleep(SLEEP_TIME);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            }
+    private void updateListExecution(DTOListSimulationDetails allSimulationsExecution) {
+        Platform.runLater(() -> {
+            updateList(allSimulationsExecution);
         });
-        thread.setDaemon(true); // Make the thread a daemon thread so it doesn't block application exit
-        thread.start();
+    }
+    public void refresherExecutionList() {
+        dataRefresher = new ExecutionListRefresher(
+                this::updateListExecution
+                );
+        timer = new Timer();
+        timer.schedule(dataRefresher, REFRESH_RATE, REFRESH_RATE);
     }
     public void pauseUpdating() {
         updating = false; // Call this method when you want to pause updating (e.g., when on the result screen)
@@ -95,15 +95,34 @@ public class ExecutionListController {
             Parent executionDetailsContent = fxmlLoader.load();
             ExecutionDetailsController controller = fxmlLoader.getController();
             controller.setMainController(resultsScreenController);
-            //controller.displaySimulationDetailsThread(newSelection, engineManager);
+            //controller.setSimulationName(simulationName);
+            //controller.refresherExecutionList(newSelection, simulationName);
             resultsScreenController.getExecutionDetailsBox().getChildren().add(executionDetailsContent);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
-
     public void updateList(DTOListSimulationDetails allSimulationsExecution) {
         ObservableList<DTOSimulationDetails> observableList = FXCollections.observableArrayList(allSimulationsExecution.getDtoSimulationDetailsList());
         simulationsTable.setItems(observableList);
+    }
+    @Override
+    public void close() {
+        if (dataRefresher != null && timer != null) {
+            dataRefresher.cancel();
+            timer.cancel();
+        }
+    }
+
+    public void setSimulationName(String id) {
+        simulationName = id;
+    }
+
+    public void setSerialNumber(String simulationSerialNumber) {
+        this.serialNumber = simulationSerialNumber;
+    }
+
+    public String getSerialNumber() {
+        return serialNumber;
     }
 }

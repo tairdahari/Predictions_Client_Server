@@ -32,7 +32,8 @@ public class HeaderController {
     @FXML
     private Label titleLabel;
     private RotateTransition rotateTransition;
-
+    @FXML
+    private Label clientName;
     @FXML
     public void initialize() {
         headerBodyComponentController.setMainController(this);
@@ -97,6 +98,9 @@ public class HeaderController {
             rotateTransition.stop();
             titleLabel.setRotate(0);
         }
+    }
+    public Label getClientName() {
+        return clientName;
     }
 
 //    public void stopAnimation() {

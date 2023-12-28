@@ -24,7 +24,7 @@ public class ListSimulationsExecutionServlet extends HttpServlet {
         IEngineManager engineManager = ServletUtils.getEngineManager(getServletContext());
         String id = request.getParameter("id");
 
-        DTOListSimulationDetails dtoListSimulationDetails = engineManager.getWorldFromFilesById(id).getAllSimulationsExecution();
+        DTOListSimulationDetails dtoListSimulationDetails = engineManager.getWorldFromFilesById(id).getAllSimulationsExecutionDto();
         List<DTOSimulationDetails> allSimulations =  dtoListSimulationDetails.getDtoSimulationDetailsList();
 
         for(DTOSimulationDetails simulationDetails : allSimulations) {

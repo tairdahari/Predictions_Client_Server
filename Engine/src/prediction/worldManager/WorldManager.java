@@ -95,9 +95,14 @@ public class WorldManager implements IWorldManager {
     }
 
     @Override
-    public DTOListSimulationDetails getAllSimulationsExecution() {
+    public DTOListSimulationDetails getAllSimulationsExecutionDto() {
         DTOListSimulationDetails dtoListSimulationDetail = new DTOListSimulationDetails(simulationExecutionManager.getAllSimulations());
         return dtoListSimulationDetail;
+    }
+
+    @Override
+    public List<ISimulationDetails> getAllSimulationsExecution() {
+        return simulationExecutionManager.getAllSimulations();
     }
 
     @Override

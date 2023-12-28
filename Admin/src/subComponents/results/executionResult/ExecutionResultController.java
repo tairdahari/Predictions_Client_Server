@@ -1,19 +1,31 @@
 package subComponents.results.executionResult;
 
+import com.google.gson.Gson;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.HttpUrl;
+import okhttp3.Response;
+import org.jetbrains.annotations.NotNull;
+import util.Constants;
+import util.http.HttpClientUtil;
 import utils.DTOEntityDefinition;
+import utils.DTOEntityQuantities;
 import utils.DTOPropertyDefinition;
 import utils.DTOPropertyHistogram;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -38,9 +50,11 @@ public class ExecutionResultController {
 
     @FXML
     private TreeView<String> treeView;
-//    private IEngineManager engineManager  = new EngineManager();
     @FXML
     private LineChart<String, Number> entityQuantityGraph;
+    private String serialNumber;
+    private String simulationName;
+    private DTOPropertyHistogram dtoPropertyHistogram;
 
 
     @FXML
@@ -59,54 +73,117 @@ public class ExecutionResultController {
             }
         }
     }
-    //            Double averageConsistency = calculateAverageConsistency(histogramData.getValues());
-//            if (averageConsistency != null) {
-//                consistencyLabel.setText(averageConsistency.toString());
-//                engineManager.getHistogram(selectedProperty).setAverageConsistency(averageConsistency);
-//            } else {
-//                consistencyLabel.setText("");
-//                engineManager.getHistogram(selectedProperty).setAverageConsistency(0.0);
-//            }
+
     public void selectedItem() {
         TreeItem<String> item = treeView.getSelectionModel().getSelectedItem();
 
         if (item != null && item.isLeaf()) {
             String selectedProperty = item.getValue();
-            DTOPropertyHistogram histogramData =null;
-            //DTOPropertyHistogram histogramData = engineManager.getHistogram(selectedProperty);
 
-            barChart.getData().clear();
-            barChart.setAnimated(true);
-            XYChart.Series<String, Number> series = new XYChart.Series<>();
+            String finalUrl = HttpUrl
+                    .parse(Constants.SIMULATION_HISTOGRAM)
+                    .newBuilder()
+                    .addQueryParameter("serialNumber", serialNumber)
+                    .addQueryParameter("simulationName", simulationName)
+                    .addQueryParameter("selectedProperty", selectedProperty)
+                    .build()
+                    .toString();
+            HttpClientUtil.runAsync(finalUrl, new Callback() {
+                @Override
+                public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                    Platform.runLater(() -> {
+                        handleFailure(e.getMessage());
+                    });
+                }
 
-            for (Map.Entry<String, Integer> entry : histogramData.getValues().entrySet()) {
-                String propertyValue = entry.getKey();
-                int frequency = entry.getValue();
-                series.getData().add(new XYChart.Data<>(propertyValue, frequency));
-            }
-
-            barChart.getData().add(series);
-            barChart.setAnimated(false);
-
-            try {
-                float consistency = calculateConsistency(selectedProperty);
-                String formattedValue = String.format("%.2f", consistency);
-                consistencyLabel.setText(formattedValue);
-            } catch (IllegalArgumentException e) {
-                consistencyLabel.setText("");
-            }
-
-            try {
-                Double averageValue = calculateAverageValue(histogramData.getValues());
-                averageLabel.setText(averageValue.toString());
-            } catch (NumberFormatException e) {
-                averageLabel.setText("");
-            }
+                @Override
+                public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                    try {
+                        if (response.isSuccessful()) {
+                            String responseData = response.body().string();
+                            Gson gson = new Gson();
+                            DTOPropertyHistogram histogramData = gson.fromJson(responseData, DTOPropertyHistogram.class);
+                            Platform.runLater(() -> {
+                                getHistogram(histogramData, selectedProperty);
+                            });
+                        }
+                    } finally {
+                        response.close();
+                    }
+                }
+            });
         }
     }
+
+    private void getHistogram(DTOPropertyHistogram histogramData, String selectedProperty) {
+        barChart.getData().clear();
+        barChart.setAnimated(true);
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+
+        for (Map.Entry<String, Integer> entry : histogramData.getValues().entrySet()) {
+            String propertyValue = entry.getKey();
+            int frequency = entry.getValue();
+            series.getData().add(new XYChart.Data<>(propertyValue, frequency));
+        }
+
+        barChart.getData().add(series);
+        barChart.setAnimated(false);
+
+        try {
+            float consistency = calculateConsistency(selectedProperty);
+            String formattedValue = String.format("%.2f", consistency);
+            consistencyLabel.setText(formattedValue);
+        } catch (IllegalArgumentException e) {
+            consistencyLabel.setText("");
+        }
+
+        try {
+            Double averageValue = calculateAverageValue(histogramData.getValues());
+            averageLabel.setText(averageValue.toString());
+        } catch (NumberFormatException e) {
+            averageLabel.setText("");
+        }
+    }
+
+
+    public void handleFailure(String errorMessage){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error In The Server");
+        alert.setContentText(errorMessage);
+        alert.setWidth(300);
+        alert.show();
+    }
+
     private float calculateConsistency(String propertyName) {
-        return 3;
-        //return engineManager.getPropertyConsistency(propertyName);
+        final float[] consistency = new float[1];
+        String finalUrl = HttpUrl
+                .parse(Constants.CONSISTENCY)
+                .newBuilder()
+                .addQueryParameter("serialNumber", serialNumber)
+                .addQueryParameter("simulationName", simulationName)
+                .addQueryParameter("propertyName", propertyName)
+                .build()
+                .toString();
+        HttpClientUtil.runAsync(finalUrl, new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                Platform.runLater(() -> {
+                    handleFailure(e.getMessage());
+                });
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                try {
+                    if (response.isSuccessful()) {
+                        consistency[0] = new Gson().fromJson(response.body().string(), Float.class);
+                    }
+                } finally {
+                    response.close();
+                }
+            }
+        });
+        return consistency[0];
     }
 
     private Double calculateAverageValue(Map<String, Integer> histogramData) {
@@ -117,12 +194,14 @@ public class ExecutionResultController {
             String propertyValue = entry.getKey();
             int frequency = entry.getValue();
 
+            // Parse the property value as a Double (assuming it's a numerical property)
             Double numericValue = Double.parseDouble(propertyValue);
 
             totalFrequency += frequency;
             totalValue += frequency * numericValue;
         }
 
+        // Calculate the average value
         if (totalFrequency > 0) {
             return totalValue / (double) totalFrequency;
         } else {
@@ -132,7 +211,36 @@ public class ExecutionResultController {
 
     @FXML
     void handleLoadButton(ActionEvent event) {
-        //displayEntityQuantityGraph(engineManager.getContext().getEntityQuantities());
+        String finalUrl = HttpUrl
+                .parse(Constants.ENTITY_QUANTITY)
+                .newBuilder()
+                .addQueryParameter("simulationName", simulationName)
+                .build()
+                .toString();
+
+        HttpClientUtil.runAsync(finalUrl, new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                Platform.runLater(() -> {
+                    handleFailure(e.getMessage());
+                });
+            }
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                try {
+                    if (response.isSuccessful()) {
+                        String responseData = response.body().string();
+                        Gson gson = new Gson();
+                        Platform.runLater(() -> {
+                            DTOEntityQuantities dtoEntityQuantities = gson.fromJson(responseData, DTOEntityQuantities.class);
+                            displayEntityQuantityGraph(dtoEntityQuantities.getDtoEntityQuantities());
+                        });
+                    }
+                } finally {
+                    response.close();
+                }
+            }
+        });
     }
 
     public void displayEntityQuantityGraph(Map<Integer, Integer> entityQuantities) {
@@ -158,7 +266,16 @@ public class ExecutionResultController {
         treeView.setRoot(rootItem);
         setEntitiesAndProperties(rootItem, dtoEntityDefinition);
     }
-//    public void setEngineManager(IEngineManager engineManager) {
-//        this.engineManager = engineManager;
-//    }
+
+    public void setSerialNumber(String simulationSerialNumber) {
+        this.serialNumber = simulationSerialNumber;
+    }
+
+    public String getSerialNumber() {
+        return serialNumber;
+    }
+
+    public void setSimulationName(String simulationName) {
+        this.simulationName = simulationName;
+    }
 }

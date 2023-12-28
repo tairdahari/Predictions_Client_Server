@@ -1,16 +1,16 @@
 package prediction.manager;
 
 import prediction.clientRequest.RequestsManager;
+import prediction.execution.simulationExecutionDetails.ISimulationDetails;
 import prediction.users.UserManager;
 import prediction.worldManager.IWorldManager;
 import prediction.worldManager.WorldManager;
 import utils.DTOAllFiles;
+import utils.DTOListSimulationDetails;
 import utils.DTOQueue;
 import utils.DTOSimulationDefinition;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
@@ -24,7 +24,7 @@ public class EngineManager implements IEngineManager {
     public EngineManager() {
         this.userManager = new UserManager();
         this.requestsManager = new RequestsManager(userManager);
-        this.threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(7);//TODO change the sie of threadpool
+        this.threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(1);//TODO change the sie of threadpool
     }
 
     @Override
@@ -37,6 +37,7 @@ public class EngineManager implements IEngineManager {
 
         return new DTOAllFiles(filesMap);
     }
+
     @Override
     public ThreadPoolExecutor getThreadPoolExecutor() {
         return threadPoolExecutor;
@@ -81,11 +82,30 @@ public class EngineManager implements IEngineManager {
         this.requestsManager = requestsManager;
     }
 
+    @Override
+    public DTOListSimulationDetails getAllEndedSimulations() {
+        List<ISimulationDetails> allEndedSimulations = new ArrayList<>();
+
+        for (Map.Entry<String, IWorldManager> clientChosenSimulationEntry :allFilesInTheSystem.entrySet()) {
+            String id = clientChosenSimulationEntry.getKey();
+
+            List<ISimulationDetails> allSimulationsById = getWorldFromFilesById(id).getAllSimulationsExecution();
+
+            for (ISimulationDetails oneSimulation : allSimulationsById) {
+                if (oneSimulation.getEndSimulationDateTime() != null) {
+                    allEndedSimulations.add(oneSimulation);
+                }
+            }
+        }
+        return new DTOListSimulationDetails(allEndedSimulations);
+    }
+
+    @Override
     public Integer getThreadPoolSizeByUser() {
         return threadPoolSizeByUser;
     }
-
+    @Override
     public void setThreadPoolSizeByUser(Integer threadPoolSizeByUser) {
-        this.threadPoolSizeByUser = threadPoolSizeByUser;
+        this.threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(threadPoolSizeByUser);
     }
 }

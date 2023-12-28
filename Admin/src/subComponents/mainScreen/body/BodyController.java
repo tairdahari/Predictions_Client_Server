@@ -31,7 +31,7 @@ public class BodyController {
     @FXML
     private AnchorPane allocationsScreenComponent;
     @FXML
-    private ResultsScreenController executionsHistoryScreenComponentController;
+    private ResultsScreenController resultsScreenComponentController;
     @FXML
     private TabPane optionsTabPane;
     private SimpleBooleanProperty executionHistoryButtonProperty;
@@ -39,6 +39,8 @@ public class BodyController {
     private SimpleBooleanProperty managementButtonProperty;
     private Event event;
     private Image image;
+    private String simulationName;
+    private String simulationSerialNumber;
     private boolean isFirstAppear = false;
 
 
@@ -50,18 +52,27 @@ public class BodyController {
 
     @FXML
     public void initialize() {
-        if (managementScreenComponentController != null && allocationsScreenComponentController != null) {// TODO need to add the component above as the management component : && allocationsScreenComponentController != null && executionsHistoryScreenComponentController != null) {
+        if (managementScreenComponentController != null && allocationsScreenComponentController != null && resultsScreenComponentController != null) {
             managementScreenComponentController.setMainController(this);
             allocationsScreenComponentController.setMainController(this);
-            //executionsHistoryScreenComponentController.setMainController(this);
+            resultsScreenComponentController.setMainController(this);
         }
         setTabsListener();
+    }
+    public AppController getMainController() {
+        return mainController;
     }
     public void updatePushTabButtons() {
         managementButton.setDisable(false);
         allocationsButton.setDisable(false);
         executionsHistoryButton.setDisable(false);
         managementButtonAction(event);
+    }
+    public String getSimulationSerialNumber() {
+        return simulationSerialNumber;
+    }
+    public void setSimulationName(String simulationName) {
+        this.simulationName = simulationName;
     }
 
     private void setTabsListener() {
@@ -88,9 +99,11 @@ public class BodyController {
 
     @FXML
     void executionsHistoryButtonAction(Event event) {
-        executionsHistoryScreenComponentController.setExecutionList();
-        executionsHistoryScreenComponentController.clearExecutionDetails();
-        executionsHistoryScreenComponentController.clearExecutionResults();
+        //String simulationName = managementScreenComponentController.getMainBodyComponentController().getSimulationName();
+        //resultsScreenComponentController.setSimulationName(simulationName);
+        resultsScreenComponentController.setExecutionList(simulationName);
+        resultsScreenComponentController.clearExecutionDetails();
+        resultsScreenComponentController.clearExecutionResults();
     }
 
     public ManagementScreenController getManagementScreenComponentController() {
@@ -130,5 +143,9 @@ public class BodyController {
         managementButton.setDisable(false);
         allocationsButton.setDisable(false);
         executionsHistoryButton.setDisable(false);
+    }
+
+    public String getSimulationName() {
+        return simulationName;
     }
 }

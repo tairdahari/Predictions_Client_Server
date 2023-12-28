@@ -1,5 +1,6 @@
 package subComponents.mainScreen.app;
 
+import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.VBox;
@@ -17,6 +18,7 @@ public class AppController {
     @FXML private BodyController bodyComponentController;
     private Stage primaryStage;
     //private IEngineManager engineManager = new EngineManager();
+    private StringProperty currentUserName;
 
     @FXML
     public void initialize() {
@@ -58,5 +60,12 @@ public class AppController {
     public void setColorBackground(String color) {
         headerComponent.setStyle("-fx-background-color: " + color + ";");
         bodyComponent.setStyle("-fx-background-color: " + color + ";");
+    }
+    public StringProperty currentUserNameProperty() {
+        return currentUserName;
+    }
+    public void updateUserName(String userName) {
+        currentUserName.set(userName);
+        headerComponentController.getClientName().setText(userName);
     }
 }

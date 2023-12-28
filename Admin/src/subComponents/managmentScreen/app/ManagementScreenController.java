@@ -1,13 +1,20 @@
 package subComponents.managmentScreen.app;
 
+import com.google.gson.Gson;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import okhttp3.*;
+import org.jetbrains.annotations.NotNull;
 import subComponents.mainScreen.body.BodyController;
+import util.Constants;
+import util.http.HttpClientUtil;
 import utils.DTOFileUpload;
 import utils.DTOQueue;
 
+import java.io.IOException;
 import java.util.List;
 
 public class ManagementScreenController {
@@ -33,7 +40,6 @@ public class ManagementScreenController {
     public void initialize() {
         setSpinners();
     }
-
     private BodyController mainBodyComponentController;
     public ListView<String> getSimulationsList() {
         return simulationsList;
@@ -42,7 +48,6 @@ public class ManagementScreenController {
         queueSize.setText(dtoQueue.getQueueSize().toString());
         workingThreads.setText(dtoQueue.getWaiting().toString());
         completedSimulations.setText(dtoQueue.getFinished().toString());
-
     }
 
     public void setMainController(BodyController bodyController) {
@@ -86,6 +91,38 @@ public class ManagementScreenController {
     }
 
     public void setCount(ActionEvent actionEvent) {
+        String finalUrl = HttpUrl
+                .parse(Constants.THREADPOOL_SIZE)
+                .newBuilder()
+                .addQueryParameter("threadPoolSizeByUser", threadCountSpinner.getValue().toString())
+                .build()
+                .toString();
+        RequestBody requestBody = RequestBody.create("", MediaType.get("application/json"));
+        HttpClientUtil.runAsyncPost(finalUrl, requestBody, new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                Platform.runLater(() -> {
+                    handleFailure(e.getMessage());
+                });
+            }
 
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                try {
+                    if (response.isSuccessful()) {
+                        String responseData = response.body().string();
+                        Gson gson = new Gson();
+                        Platform.runLater(() -> {
+                        });
+                    }
+                } finally {
+                    response.close();
+                }
+            }
+        });
+    }
+
+    public BodyController getMainBodyComponentController() {
+        return mainBodyComponentController;
     }
 }

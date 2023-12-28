@@ -3,6 +3,7 @@ package prediction.worldManager;
 import prediction.Termination.clientTerminationManager.TerminationByClientManager;
 import prediction.World;
 import prediction.execution.context.IContext;
+import prediction.execution.simulationExecutionDetails.ISimulationDetails;
 import utils.*;
 import xmlJavaFXReader.schema.generated.PRDWorld;
 
@@ -20,7 +21,8 @@ public interface IWorldManager extends Serializable {
 
     void transferringDataFromTheXMLClassesToOurClasses(PRDWorld world);
     DTOSimulationDefinition getSimulationDefinition();
-    DTOListSimulationDetails getAllSimulationsExecution();
+    DTOListSimulationDetails getAllSimulationsExecutionDto();
+    List<ISimulationDetails> getAllSimulationsExecution();
 
     void saveToFile(String var1) throws IOException;
     void loadFromFile(String var1) throws IOException, ClassNotFoundException;
